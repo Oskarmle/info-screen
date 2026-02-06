@@ -106,7 +106,7 @@ const infoScreensContent = [
 
 const DashboardSidebar = () => {
   return (
-    <Sidebar collapsible="icon" variant="floating">
+    <Sidebar collapsible="icon" variant="inset">
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>

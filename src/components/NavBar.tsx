@@ -18,10 +18,10 @@ import { SidebarTrigger } from "./ui/sidebar";
 const NavBar = () => {
   const { setTheme } = useTheme();
   return (
-    <nav className="p-4 flex w-full items-center justify-between">
+    <nav className="p-4 flex w-full items-center justify-between bg-background rounded-t-2xl">
       {/* collapseButton */}
       <SidebarTrigger />
-      <div className="flex items-center justify-end gap-4 w-full">
+      <div className="flex items-center justify-end gap-6 w-full">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="icon">
