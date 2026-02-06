@@ -1,6 +1,7 @@
 import DashboardSidebar from "@/src/components/DashboardSidebar";
 import NavBar from "@/src/components/NavBar";
 import { ThemeProvider } from "@/src/components/providers/ThemeProvider";
+import { SidebarProvider } from "@/src/components/ui/sidebar";
 
 export default function DashboardLayout({
   children,
@@ -15,11 +16,13 @@ export default function DashboardLayout({
         enableSystem
         disableTransitionOnChange
       >
-        <DashboardSidebar />
-        <main className="w-full">
-          <NavBar />
-          <div className="px-4">{children}</div>
-        </main>
+        <SidebarProvider >
+          <DashboardSidebar />
+          <main className="w-full">
+            <NavBar />
+            <div className="px-4">{children}</div>
+          </main>
+        </SidebarProvider>
       </ThemeProvider>
     </div>
   );
