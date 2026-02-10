@@ -2,8 +2,14 @@ import Link from "next/link";
 import { GithubSignIn } from "@/src/components/GithubSignIn";
 import { Input } from "@/src/components/ui/input";
 import { Button } from "@/src/components/ui/button";
+import { signUp } from "@/lib/actions";
+import { redirect } from "next/navigation";
+import { auth } from "@/lib/auth";
 
 const Page = async () => {
+  const session = await auth();
+  if (session) redirect("/dashboard");
+
   return (
     <div className="w-full border p-4 rounded-lg max-w-sm mx-auto space-y-6">
       <h1 className="text-2xl font-bold text-center mb-6">Create Account</h1>
@@ -24,8 +30,12 @@ const Page = async () => {
       {/* Email/Password Sign Up */}
       <form
         className="space-y-4"
-        action={async () => {
+        action={async (formData: FormData) => {
           "use server";
+          const res = await signUp(formData);
+          if (res.success) {
+            redirect("/sign-in");
+          }
         }}
       >
         <Input
