@@ -14,9 +14,19 @@ import {
 import { Button } from "./ui/button";
 import { useTheme } from "next-themes";
 import { SidebarTrigger } from "./ui/sidebar";
+import { signOut } from "next-auth/react";
 
-const NavBar = () => {
+type NavBarProps = {
+  username?: string;
+};
+
+const NavBar = ({ username }: NavBarProps) => {
   const { setTheme } = useTheme();
+
+  const handleSignOut = async () => {
+    await signOut();
+  };
+
   return (
     <nav className="p-4 flex w-full items-center justify-between bg-background rounded-t-2xl">
       {/* collapseButton */}
@@ -52,7 +62,7 @@ const NavBar = () => {
           </DropdownMenuTrigger>
           <DropdownMenuContent sideOffset={10}>
             <DropdownMenuGroup>
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuLabel>{username}</DropdownMenuLabel>
               <DropdownMenuItem>
                 <User />
                 Profile
@@ -64,7 +74,7 @@ const NavBar = () => {
             </DropdownMenuGroup>
             <DropdownMenuGroup>
               <DropdownMenuSeparator />
-              <DropdownMenuItem variant="destructive">
+              <DropdownMenuItem variant="destructive" onClick={handleSignOut}>
                 <LogOut />
                 Log out
               </DropdownMenuItem>

@@ -1,9 +1,14 @@
+import { auth } from "@/lib/auth";
 import { GithubSignIn } from "@/src/components/GithubSignIn";
 import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 const Page = async () => {
+  const session = await auth();
+  if (session) redirect("/dashboard");
+
   return (
     <div className="w-full border p-4 rounded-lg max-w-sm mx-auto space-y-6">
       <h1 className="text-2xl font-bold text-center mb-6">Sign In</h1>
