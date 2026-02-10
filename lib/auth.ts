@@ -8,6 +8,19 @@ export const { auth, handlers, signIn } = NextAuth({
       credentials: {
         email: {},
         password: {},
+        name: {},
+      },
+      authorize: async (credentials) => {
+        // mock data for testing
+        const email = "admin@admin.com";
+        const password = "password";
+        const name = "admin";
+
+        if (credentials.email === email && credentials.password === password) {
+          return { email, password, name };
+        } else {
+          throw new Error("Invalid credentials");
+        }
       },
     }),
   ],

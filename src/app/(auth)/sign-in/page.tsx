@@ -1,4 +1,5 @@
-import { auth } from "@/lib/auth";
+import { auth, signIn } from "@/lib/auth";
+import { executeAction } from "@/lib/executeAction";
 import { GithubSignIn } from "@/src/components/GithubSignIn";
 import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
@@ -28,8 +29,13 @@ const Page = async () => {
       {/* Email/Password Sign In */}
       <form
         className="space-y-4"
-        action={async () => {
+        action={async (formData: FormData) => {
           "use server";
+          await executeAction({
+            actionFn: async () => {
+                await signIn("credentials", formData)
+            }
+          })
         }}
       >
         <Input
