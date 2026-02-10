@@ -5,6 +5,7 @@ import { Button } from "@/src/components/ui/button";
 import { signUp } from "@/lib/actions";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
+import { GoogleSignIn } from "@/src/components/GoogleSignIn";
 
 const Page = async () => {
   const session = await auth();
@@ -15,6 +16,7 @@ const Page = async () => {
       <h1 className="text-2xl font-bold text-center mb-6">Create Account</h1>
 
       <GithubSignIn />
+      <GoogleSignIn />
 
       <div className="relative">
         <div className="absolute inset-0 flex items-center">
