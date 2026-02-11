@@ -1,6 +1,6 @@
 "use client";
 
-import { LogOut, Moon, Sun, User, Users } from "lucide-react";
+import { LogOut, Moon, Sun, Users } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import {
   DropdownMenu,
@@ -17,10 +17,16 @@ import { SidebarTrigger } from "./ui/sidebar";
 import { signOut } from "next-auth/react";
 
 type NavBarProps = {
-  username?: string;
+  session?: {
+    user?: {
+      name?: string | null;
+      email?: string | null;
+      image?: string | null;
+    } | null;
+  };
 };
 
-const NavBar = ({ username }: NavBarProps) => {
+const NavBar = ({ session }: NavBarProps) => {
   const { setTheme } = useTheme();
 
   const handleSignOut = async () => {
@@ -55,18 +61,15 @@ const NavBar = ({ username }: NavBarProps) => {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Avatar>
-              <AvatarImage src="https://github.com/shadcn.png" />
+              <AvatarImage src={session?.user?.image || undefined} />
               <AvatarFallback>CN</AvatarFallback>
               <span className="sr-only">User settings</span>
             </Avatar>
           </DropdownMenuTrigger>
           <DropdownMenuContent sideOffset={10}>
             <DropdownMenuGroup>
-              <DropdownMenuLabel>{username}</DropdownMenuLabel>
-              <DropdownMenuItem>
-                <User />
-                Profile
-              </DropdownMenuItem>
+              <DropdownMenuLabel>{session?.user?.name}</DropdownMenuLabel>
+              <DropdownMenuItem>Profile</DropdownMenuItem>
               <DropdownMenuItem>
                 <Users />
                 Team

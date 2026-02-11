@@ -22,7 +22,7 @@ export default async function DashboardLayout({
         <SidebarProvider>
           <DashboardSidebar />
           <main className="w-full mt-4 mb-4 mr-4 bg-background rounded-lg">
-            <NavBar username={session?.user?.name || undefined} />
+            <NavBar session={session || undefined} />
             <div className="px-4">{children}</div>
           </main>
         </SidebarProvider>
