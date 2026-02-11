@@ -4,9 +4,9 @@ import { v4 as uuid } from "uuid";
 import GitHub from "next-auth/providers/github";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "./db/prisma";
-import { schema } from "./db/schema";
 import { encode } from "next-auth/jwt";
 import Google from "next-auth/providers/google";
+import { userSchema } from "./db/schema";
 
 const adapter = PrismaAdapter(prisma);
 
@@ -21,7 +21,7 @@ export const { auth, handlers, signIn } = NextAuth({
         password: {},
       },
       authorize: async (credentials) => {
-        const validatedCredentials = schema.parse(credentials);
+        const validatedCredentials = userSchema.parse(credentials);
 
         const user = await prisma.user.findFirst({
           where: {
