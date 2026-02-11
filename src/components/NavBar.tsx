@@ -34,7 +34,7 @@ const NavBar = ({ session }: NavBarProps) => {
   };
 
   return (
-    <nav className="p-4 flex w-full items-center justify-between bg-background rounded-t-2xl">
+    <nav className="p-4 flex h-18 w-full items-center justify-between bg-background rounded-t-2xl">
       {/* collapseButton */}
       <SidebarTrigger />
       <div className="flex items-center justify-end gap-6 w-full">

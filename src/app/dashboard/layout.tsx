@@ -12,7 +12,7 @@ export default async function DashboardLayout({
   const session = await auth();
 
   return (
-    <div className="flex" suppressHydrationWarning>
+    <div className="flex h-screen w-full overflow-hidden" suppressHydrationWarning>
       <ThemeProvider
         attribute="class"
         defaultTheme="system"
@@ -21,9 +21,9 @@ export default async function DashboardLayout({
       >
         <SidebarProvider>
           <DashboardSidebar />
-          <main className="w-full mt-4 mb-4 mr-4 bg-background rounded-lg">
+          <main className="flex w-full flex-col mt-4 mb-4 mr-4 bg-background rounded-lg overflow-hidden">
             <NavBar session={session || undefined} />
-            <div className="px-4">{children}</div>
+            <div className="flex flex-1 min-h-0 w-full overflow-hidden">{children}</div>
           </main>
         </SidebarProvider>
       </ThemeProvider>
