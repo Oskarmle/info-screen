@@ -19,8 +19,34 @@ model User {
   // Optional for WebAuthn support
   Authenticator Authenticator[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  userOrganizations UserOrganization[]
+}
+
+model UserOrganization {
+  userId         String
+  organizationId String
+  isAdmin        Boolean @default(false)
+
+  user         User         @relation(fields: [userId], references: [id])
+  organization Organization @relation(fields: [organizationId], references: [id])
+
+  @@id([userId, organizationId])
+}
+
+model Organization {
+  id         String  @id @default(uuid())
+  name       String  @unique
+  street     String
+  postalCode String
+  city       String
+  cvrNumber  Int?    @unique
+  logo       String?
+
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  userOrganizations UserOrganization[]
 }
 
 model Account {
