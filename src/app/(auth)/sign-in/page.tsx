@@ -1,6 +1,7 @@
 import { auth, signIn } from "@/lib/auth";
 import { executeAction } from "@/lib/executeAction";
 import { GithubSignIn } from "@/src/components/GithubSignIn";
+import { GoogleSignIn } from "@/src/components/GoogleSignIn";
 import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
 import Link from "next/link";
@@ -15,6 +16,7 @@ const Page = async () => {
       <h1 className="text-2xl font-bold text-center mb-6">Sign In</h1>
 
       <GithubSignIn />
+      <GoogleSignIn />
       <div className="relative">
         <div className="absolute inset-0 flex items-center">
           <span className="w-full border-t" />
@@ -26,16 +28,15 @@ const Page = async () => {
         </div>
       </div>
 
-      {/* Email/Password Sign In */}
       <form
         className="space-y-4"
         action={async (formData: FormData) => {
           "use server";
           await executeAction({
             actionFn: async () => {
-                await signIn("credentials", formData)
-            }
-          })
+              await signIn("credentials", formData);
+            },
+          });
         }}
       >
         <Input
