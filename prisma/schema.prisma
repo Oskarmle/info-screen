@@ -39,9 +39,9 @@ model Organization {
   id         String  @id @default(uuid())
   name       String  @unique
   street     String
-  postalCode String
+  postalCode Int
   city       String
-  cvrNumber  Int?    @unique
+  cvrNumber  String? @unique
   logo       String?
 
   createdAt         DateTime           @default(now())
