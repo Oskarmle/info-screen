@@ -11,11 +11,13 @@ const Page = async () => {
     include: { organization: true },
   });
 
-  if (memberships.length === 0) redirect("/dashboard/organizations");
+  if (memberships.length === 0) redirect("/dashboard/organization");
 
-  console.log("User Organizations:", memberships);
-
-  return <div className="flex h-full w-full bg-amber-800 rounded-b-lg">Dashboard</div>;
+  return (
+    <div className="flex h-full w-full bg-amber-800 rounded-b-lg">
+      Dashboard
+    </div>
+  );
 };
 
 export default Page;
