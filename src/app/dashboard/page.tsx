@@ -13,11 +13,7 @@ const Page = async () => {
 
   if (memberships.length === 0) redirect("/dashboard/organization");
 
-  return (
-    <div className="flex h-full w-full bg-amber-800 rounded-b-lg">
-      Dashboard
-    </div>
-  );
+  return <div className="flex h-full w-full rounded-b-lg px-4">Dashboard</div>;
 };
 
 export default Page;
