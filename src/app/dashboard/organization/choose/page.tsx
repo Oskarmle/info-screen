@@ -34,7 +34,7 @@ const Page = async () => {
       <div className="flex flex-1 mt-4 min-h-0 w-full">
         <div className="flex justify-around w-full min-h-0 overflow-hidden">
           <form
-            className="w-1/2 gap-4 flex flex-col rounded-lg p-4"
+            className="w-1/2 gap-4 flex flex-col rounded-lg"
             action={async (formData: FormData) => {
               "use server";
               const res = await createOrganization(formData);
