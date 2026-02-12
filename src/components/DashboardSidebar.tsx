@@ -3,9 +3,7 @@ import {
   CirclePlus,
   Home,
   List,
-  Minus,
   Pencil,
-  Plus,
   Search,
   Settings,
   Tv,
@@ -32,6 +30,10 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "./ui/collapsible";
+import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/db/prisma";
+import { getSelectedOrganization } from "@/lib/organizationActions";
+import OrganizationSwitcher from "./OrganizationSwitcher";
 
 const DefaultItems = [
   {
@@ -104,20 +106,22 @@ const infoScreensContent = [
   },
 ];
 
-const DashboardSidebar = () => {
+const DashboardSidebar = async () => {
+  const session = await auth();
+  const memberships = await prisma.userOrganization.findMany({
+    where: { userId: session?.user?.id },
+    include: { organization: true },
+  });
+  const savedOrganizationId = await getSelectedOrganization();
+
   return (
     <Sidebar collapsible="icon" variant="inset">
       <SidebarHeader>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <Link href="/dashboard">
-                <Home />
-                <span>Info Screen Dashboard</span>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
+        <OrganizationSwitcher
+          key={"organization-switcher"}
+          organizations={memberships}
+          defaultOrganization={savedOrganizationId}
+        />
       </SidebarHeader>
       <SidebarSeparator />
       <SidebarContent>
