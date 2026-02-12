@@ -1,4 +1,5 @@
 import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/db/prisma";
 import DashboardSidebar from "@/src/components/DashboardSidebar";
 import NavBar from "@/src/components/NavBar";
 import { ThemeProvider } from "@/src/components/providers/ThemeProvider";
@@ -12,7 +13,10 @@ export default async function DashboardLayout({
   const session = await auth();
 
   return (
-    <div className="flex h-screen w-full overflow-hidden" suppressHydrationWarning>
+    <div
+      className="flex h-screen w-full overflow-hidden"
+      suppressHydrationWarning
+    >
       <ThemeProvider
         attribute="class"
         defaultTheme="system"
@@ -23,7 +27,9 @@ export default async function DashboardLayout({
           <DashboardSidebar />
           <main className="flex w-full flex-col mt-4 mb-4 mr-4 bg-background rounded-lg overflow-hidden">
             <NavBar session={session || undefined} />
-            <div className="flex flex-1 min-h-0 w-full overflow-hidden">{children}</div>
+            <div className="flex flex-1 min-h-0 w-full overflow-hidden">
+              {children}
+            </div>
           </main>
         </SidebarProvider>
       </ThemeProvider>
