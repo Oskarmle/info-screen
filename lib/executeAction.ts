@@ -5,16 +5,21 @@ type Options<T> = {
   successMessage?: string;
 };
 
+type ActionResult<T> = 
+  | { success: true; message: string; data: T }
+  | { success: false; message: string; data?: undefined };
+
 const executeAction = async <T>({
   actionFn,
   successMessage = "The actions was successful",
-}: Options<T>): Promise<{ success: boolean; message: string }> => {
+}: Options<T>): Promise<ActionResult<T>> => {
   try {
-    await actionFn();
+    const data = await actionFn();
 
     return {
       success: true,
       message: successMessage,
+      data,
     };
   } catch (error) {
     if (isRedirectError(error)) {
