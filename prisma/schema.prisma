@@ -59,6 +59,19 @@ model Organization {
   createdAt         DateTime           @default(now())
   updatedAt         DateTime           @updatedAt
   userOrganizations UserOrganization[]
+  infoScreens       InfoScreen[]
+}
+
+model InfoScreen {
+  id             String       @id @default(uuid())
+  title          String       @unique
+  description    String
+  style          String?
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Account {
