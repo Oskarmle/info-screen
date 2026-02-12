@@ -11,9 +11,12 @@ const Page = async () => {
   if (!session) redirect("/sign-in");
 
   const memberships = await prisma.userOrganization.findMany({
-    where: { userId: session?.user?.id },
     include: { organization: true },
   });
+
+  const filteredMemberships = memberships.filter(
+    (membership) => membership.userId !== session?.user?.id,
+  );
 
   return (
     <div className="flex flex-col flex-1 min-h-0 w-full gap-4 rounded-lg p-4">
@@ -33,7 +36,7 @@ const Page = async () => {
           </Button>
           <Separator orientation="vertical" />
           <div className="flex flex-col gap-6 overflow-auto pr-4 rounded-lg">
-            {memberships.map((membership) => (
+            {filteredMemberships.map((membership) => (
               <OrganizationCard
                 key={membership.organization.id}
                 membership={membership}
