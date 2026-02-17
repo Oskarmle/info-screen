@@ -1,10 +1,8 @@
 import {
-  Calendar,
+  Building2,
   CirclePlus,
-  Home,
   List,
   Pencil,
-  Search,
   Settings,
   Tv,
 } from "lucide-react";
@@ -37,31 +35,26 @@ import OrganizationSwitcher from "./OrganizationSwitcher";
 
 const DefaultItems = [
   {
+    title: "Organizations",
+    href: "/dashboard/organization/choose",
+    icon: <Building2 />,
+  },
+  {
     title: "Settings",
     href: "/dashboard/settings",
     icon: <Settings />,
-  },
-  {
-    title: "Calender",
-    href: "/dashboard/calender",
-    icon: <Calendar />,
-  },
-  {
-    title: "Search",
-    href: "/dashboard/search",
-    icon: <Search />,
   },
 ];
 
 const infoScreens = [
   {
     title: "Create new info screen",
-    href: "/dashboard/create-new-infoscreen",
+    href: "/dashboard/info-screen/create",
     icon: <CirclePlus />,
   },
   {
     title: "See all info screens",
-    href: "/dashboard/see-all-infoscreens",
+    href: "/dashboard/info-screen/see-all",
     icon: <List />,
   },
   {
@@ -186,7 +179,6 @@ const DashboardSidebar = async () => {
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarGroupLabel>Navigation</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
                 {DefaultItems.map((item) => (
