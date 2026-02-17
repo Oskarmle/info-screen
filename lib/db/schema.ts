@@ -25,3 +25,10 @@ export const organizationSchema = z.object({
     }
   }, z.string().optional()),
 });
+
+export const infoScreenSchema = z.object({
+  title: z.string().min(2).max(100),
+  description: z.string(),
+  organizationId: z.string(),
+  colourId: z.string(),
+});
