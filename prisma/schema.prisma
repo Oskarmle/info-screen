@@ -63,15 +63,33 @@ model Organization {
 }
 
 model InfoScreen {
-  id             String       @id @default(uuid())
-  title          String       @unique
-  description    String
-  style          String?
+  id               String             @id @default(uuid())
+  title            String             @unique
+  description      String
+
+  colourInfoScreen ColourInfoScreen[]
+
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Colour {
+  id          String             @id @default(uuid())
+  name        String             @unique
+  oklch       String             @unique
+  colourInfoScreen ColourInfoScreen[]
+}
+
+model ColourInfoScreen {
+  colourId     String
+  infoScreenId String
+  colour       Colour     @relation(fields: [colourId], references: [id], onDelete: Cascade)
+  infoScreen   InfoScreen @relation(fields: [infoScreenId], references: [id], onDelete: Cascade)
+
+  @@id([colourId, infoScreenId])
 }
 
 model Account {
