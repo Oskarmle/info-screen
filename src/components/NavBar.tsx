@@ -1,6 +1,6 @@
 "use client";
 
-import { LogOut, Moon, Sun, Users } from "lucide-react";
+import { LogOut, Moon, Sun, User, Users } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import {
   DropdownMenu,
@@ -66,10 +66,13 @@ const NavBar = ({ session }: NavBarProps) => {
               <span className="sr-only">User settings</span>
             </Avatar>
           </DropdownMenuTrigger>
-          <DropdownMenuContent sideOffset={10}>
+          <DropdownMenuContent sideOffset={10} align="end">
             <DropdownMenuGroup>
               <DropdownMenuLabel>{session?.user?.name}</DropdownMenuLabel>
-              <DropdownMenuItem>Profile</DropdownMenuItem>
+              <DropdownMenuItem>
+                <User />
+                Profile
+              </DropdownMenuItem>
               <DropdownMenuItem>
                 <Users />
                 Team
