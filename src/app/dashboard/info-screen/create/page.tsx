@@ -74,6 +74,7 @@ const Page = async () => {
                     required
                     name="description"
                     autoComplete="description"
+                    className="h-40"
                   />
                   <FieldDescription>
                     Describe your info screen and its purpose. This will help
