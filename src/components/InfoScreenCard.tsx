@@ -48,28 +48,46 @@ const InfoScreenCard = ({ infoScreen }: InfoScreenCardProps) => {
       </CardHeader>
       <CardContent>
         {/* FIXME: correct links when deployed */}
-        <p className="text-sm">The link to the info screen is:</p>
-        <p className="text-sm">http://localhost:3000/info-screen/{infoScreen.id}</p>
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-col">
+            <p className="text-sm">The link to the info screen is:</p>
+            <p className="text-sm">
+              http://localhost:3000/info-screen/{infoScreen.id}
+            </p>
+          </div>
+          <div
+            className="flex justify-center items-center h-9 rounded-lg border text-sm"
+            style={{ backgroundColor: infoScreen.colour?.oklch }}
+          >
+            The color of the info-screen
+          </div>
+        </div>
       </CardContent>
       <CardFooter className="flex justify-between bg-accent rounded-b-lg py-4 border-t">
         <div className="flex items-center gap-2">
+          <a
+            href={`http://localhost:3000/info-screen/${infoScreen.id}`}
+            target="_blank"
+          >
+            <Button variant="default">Go to info-screen</Button>
+          </a>
           <Button
-            variant="default"
-            onClick={() => copyToClipboard(`http://localhost:3000/info-screen/${infoScreen.id}`)}
+            variant="outline"
+            onClick={() =>
+              copyToClipboard(
+                `http://localhost:3000/info-screen/${infoScreen.id}`,
+              )
+            }
           >
             Copy link
           </Button>
-          <Button
-            variant="outline"
-            onClick={() => deleteInfoScreenHandler(infoScreen.id)}
-          >
-            Delete
-          </Button>
         </div>
-        <div
-          className="h-9 w-40 rounded-lg border"
-          style={{ backgroundColor: infoScreen.colour?.oklch }}
-        />
+        <Button
+          variant="destructive"
+          onClick={() => deleteInfoScreenHandler(infoScreen.id)}
+        >
+          Delete
+        </Button>
       </CardFooter>
     </Card>
   );
