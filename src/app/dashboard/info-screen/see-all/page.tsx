@@ -23,7 +23,6 @@ const Page = async () => {
     }) ?? [],
   );
 
-  console.log(infoScreens);
   return (
     <div
       className="flex flex-col min-h-0 h-full w-full gap-4 rounded-lg p-4"
