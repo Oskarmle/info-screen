@@ -35,7 +35,7 @@ import OrganizationSwitcher from "./OrganizationSwitcher";
 import { cookies } from "next/headers";
 import { fetchAllInfoScreenForOrganization } from "@/lib/infoScreenActions";
 
-const DefaultItems = [
+const FooterPages = [
   {
     title: "Organizations",
     href: "/dashboard/organization/choose",
@@ -128,7 +128,7 @@ const DashboardSidebar = async () => {
                         {infoScreens.data.map((screen) => (
                           <SidebarMenuSubItem key={screen.id}>
                             <SidebarMenuSubButton asChild>
-                              <Link href={`/info-screen/${screen.id}`}>
+                              <Link href={`/dashboard/info-screen/edit/${screen.id}`}>
                                 <Tv /> {screen.title}
                               </Link>
                             </SidebarMenuSubButton>
@@ -165,7 +165,7 @@ const DashboardSidebar = async () => {
           <SidebarMenuItem>
             <SidebarGroupContent>
               <SidebarMenu>
-                {DefaultItems.map((item) => (
+                {FooterPages.map((item) => (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild>
                       <Link href={item.href}>
