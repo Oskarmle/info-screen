@@ -1,7 +1,8 @@
 import { fetchInfoScreen } from "@/lib/infoScreenActions";
 
-const Page = async ({ params }: { params: { id: string } }) => {
-  const infoScreen = await fetchInfoScreen(params.id);
+const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
+  const { id } = await params;
+  const infoScreen = await fetchInfoScreen(id);
 
   console.log("Fetched info screen in page:", infoScreen);
 
