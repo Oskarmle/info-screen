@@ -32,6 +32,8 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db/prisma";
 import { getSelectedOrganization } from "@/lib/organizationActions";
 import OrganizationSwitcher from "./OrganizationSwitcher";
+import { cookies } from "next/headers";
+import { fetchAllInfoScreenForOrganization } from "@/lib/infoScreenActions";
 
 const DefaultItems = [
   {
@@ -46,7 +48,7 @@ const DefaultItems = [
   },
 ];
 
-const infoScreens = [
+const InfoScreenPages = [
   {
     title: "Create new info screen",
     href: "/dashboard/info-screen/create",
@@ -56,33 +58,6 @@ const infoScreens = [
     title: "See all info screens",
     href: "/dashboard/info-screen/see-all",
     icon: <List />,
-  },
-  {
-    title: "Edit existing info screens",
-    href: "#",
-    icon: <Pencil />,
-    infoScreens: [
-      {
-        title: "Info Screen 1",
-        href: "/dashboard/see-all-infoscreens/1",
-        icon: <Tv />,
-      },
-      {
-        title: "Info Screen 2",
-        href: "/dashboard/see-all-infoscreens/1",
-        icon: <Tv />,
-      },
-      {
-        title: "Info Screen 3",
-        href: "/dashboard/see-all-infoscreens/1",
-        icon: <Tv />,
-      },
-      {
-        title: "Info Screen 4",
-        href: "/dashboard/see-all-infoscreens/1",
-        icon: <Tv />,
-      },
-    ],
   },
 ];
 
@@ -101,11 +76,20 @@ const infoScreensContent = [
 
 const DashboardSidebar = async () => {
   const session = await auth();
+  const cookieStore = await cookies();
   const memberships = await prisma.userOrganization.findMany({
     where: { userId: session?.user?.id },
     include: { organization: true },
   });
   const savedOrganizationId = await getSelectedOrganization();
+
+  const selectedOrganizationId = cookieStore.get(
+    "selectedOrganizationId",
+  )?.value;
+
+  const infoScreens = await fetchAllInfoScreenForOrganization(
+    selectedOrganizationId ?? "",
+  );
 
   return (
     <Sidebar collapsible="icon" variant="inset">
@@ -122,39 +106,39 @@ const DashboardSidebar = async () => {
           <SidebarGroupLabel>Info Screens</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {infoScreens.map((item) => (
-                <Collapsible
-                  key={item.title}
-                  defaultOpen={item.infoScreens?.some(
-                    (subItem) => subItem.title === "Info Screen 1",
-                  )}
-                >
-                  <SidebarMenuItem key={item.title}>
+              {InfoScreenPages.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild>
+                    <Link href={item.href}>
+                      {item.icon} {item.title}
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+              {infoScreens.data && infoScreens.data.length > 0 && (
+                <Collapsible defaultOpen>
+                  <SidebarMenuItem>
                     <CollapsibleTrigger asChild>
-                      <SidebarMenuButton asChild>
-                        <Link href={item.href}>
-                          {item.icon} {item.title}
-                        </Link>
+                      <SidebarMenuButton>
+                        <Pencil /> Edit existing info screens
                       </SidebarMenuButton>
                     </CollapsibleTrigger>
-                    {item.infoScreens?.length ? (
-                      <CollapsibleContent>
-                        <SidebarMenuSub>
-                          {item.infoScreens.map((subItem) => (
-                            <SidebarMenuSubItem key={subItem.title}>
-                              <SidebarMenuSubButton asChild>
-                                <Link href={subItem.href}>
-                                  {subItem.icon} {subItem.title}
-                                </Link>
-                              </SidebarMenuSubButton>
-                            </SidebarMenuSubItem>
-                          ))}
-                        </SidebarMenuSub>
-                      </CollapsibleContent>
-                    ) : null}
+                    <CollapsibleContent>
+                      <SidebarMenuSub>
+                        {infoScreens.data.map((screen) => (
+                          <SidebarMenuSubItem key={screen.id}>
+                            <SidebarMenuSubButton asChild>
+                              <Link href={`/info-screen/${screen.id}`}>
+                                <Tv /> {screen.title}
+                              </Link>
+                            </SidebarMenuSubButton>
+                          </SidebarMenuSubItem>
+                        ))}
+                      </SidebarMenuSub>
+                    </CollapsibleContent>
                   </SidebarMenuItem>
                 </Collapsible>
-              ))}
+              )}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
