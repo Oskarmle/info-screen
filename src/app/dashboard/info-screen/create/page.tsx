@@ -1,3 +1,4 @@
+import { fetchColours } from "@/lib/colourAction";
 import { createInfoScreen } from "@/lib/infoScreenActions";
 import ColourPickerInfoScreen from "@/src/components/ColourPickerInfoScreen";
 import { Button } from "@/src/components/ui/button";
@@ -18,6 +19,9 @@ const Page = async () => {
   const selectedOrganizationId = cookieStore.get(
     "selectedOrganizationId",
   )?.value;
+
+  const coloursResult = await fetchColours();
+  const colours = coloursResult.success ? coloursResult.data ?? [] : [];
 
   return (
     <div
@@ -78,7 +82,7 @@ const Page = async () => {
                 </Field>
                 <Field>
                   <FieldLabel htmlFor="colour-picker">Colour</FieldLabel>
-                  <ColourPickerInfoScreen />
+                  <ColourPickerInfoScreen colours={colours} />
                   <FieldDescription>
                     Choose the main colour for your info screen. This will be
                     used as the background colour and accent colour for your
