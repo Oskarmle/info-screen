@@ -48,7 +48,7 @@ const InfoScreenCard = ({ infoScreen }: InfoScreenCardProps) => {
       </CardHeader>
       <CardContent>
         {/* FIXME: correct links when deployed */}
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-6">
           <div className="flex flex-col">
             <p className="text-sm">The link to the info screen is:</p>
             <p className="text-sm">
