@@ -1,3 +1,6 @@
+"use server";
+
+import { revalidatePath } from "next/cache";
 import { auth } from "./auth";
 import { prisma } from "./db/prisma";
 import { infoScreenSchema } from "./db/schema";
@@ -95,6 +98,23 @@ export const fetchInfoScreen = async (infoScreenId: string) => {
       if (!membership) throw new Error("Forbidden");
 
       return infoScreen;
+    },
+  });
+};
+
+export const deleteInfoScreen = async (infoScreenId: string) => {
+  return executeAction({
+    actionFn: async () => {
+      const session = await auth();
+      if (!session?.user?.id) {
+        throw new Error("Unauthorized");
+      }
+
+      await prisma.infoScreen.delete({
+        where: { id: infoScreenId },
+      });
+
+      revalidatePath("/dashboard/info-screen/see-all");
     },
   });
 };
