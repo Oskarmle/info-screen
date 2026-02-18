@@ -1,13 +1,7 @@
 import { fetchColour } from "@/lib/colourAction";
 import { fetchAllInfoScreenForOrganization } from "@/lib/infoScreenActions";
+import InfoScreenCard from "@/src/components/InfoScreenCard";
 import { Button } from "@/src/components/ui/button";
-import {
-  Card,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/src/components/ui/card";
 import { ScrollArea } from "@/src/components/ui/scroll-area";
 import { cookies } from "next/headers";
 import Link from "next/link";
@@ -24,8 +18,8 @@ const Page = async () => {
 
   const infoScreensWithColours = await Promise.all(
     infoScreens.data?.map(async (infoScreen) => {
-      const colour = await fetchColour(infoScreen.colourId);
-      return { ...infoScreen, colour };
+      const colourResult = await fetchColour(infoScreen.colourId);
+      return { ...infoScreen, colour: colourResult.data ?? null };
     }) ?? [],
   );
 
@@ -44,25 +38,10 @@ const Page = async () => {
       <Link href="/dashboard/info-screen/create" className="w-fit">
         <Button variant="secondary">Create a info screen</Button>
       </Link>
-      <ScrollArea className="flex h-full pr-4 rounded-lg">
-        <div className="flex flex-col gap-4 mb-12">
+      <ScrollArea className="flex-1 min-h-0 pr-4 rounded-lg">
+        <div className="flex flex-col gap-4 pb-4">
           {infoScreensWithColours.map((infoScreen) => (
-            <Card key={infoScreen.id} className="pt-4 pb-0">
-              <CardHeader>
-                <CardTitle>{infoScreen.title}</CardTitle>
-                <CardDescription>{infoScreen.description}</CardDescription>
-              </CardHeader>
-              <CardFooter className="flex justify-between bg-accent rounded-b-lg py-4 border-t">
-                <div className="flex items-center gap-2">
-                  <Button variant="default">Get link</Button>
-                  <Button variant="outline">Delete</Button>
-                </div>
-                <div
-                  className="h-9 w-40 rounded-lg border"
-                  style={{ backgroundColor: infoScreen.colour.data?.oklch }}
-                />
-              </CardFooter>
-            </Card>
+            <InfoScreenCard key={infoScreen.id} infoScreen={infoScreen} />
           ))}
         </div>
       </ScrollArea>
