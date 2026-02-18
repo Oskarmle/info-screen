@@ -9,6 +9,7 @@ import {
 } from "./ui/card";
 import { Button } from "./ui/button";
 import { deleteInfoScreen } from "@/lib/infoScreenActions";
+import { toast } from "sonner";
 
 type InfoScreenCardProps = {
   infoScreen: {
@@ -35,6 +36,9 @@ const InfoScreenCard = ({ infoScreen }: InfoScreenCardProps) => {
   const copyToClipboard = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
+      toast.success("Link copied to clipboard", {
+        position: "bottom-right",
+      });
     } catch (err) {
       console.error(err);
     }
