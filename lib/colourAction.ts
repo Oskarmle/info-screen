@@ -8,3 +8,14 @@ export const fetchColours = async () => {
     },
   });
 };
+
+export const fetchColour = async (colourId: string) => {
+  return executeAction({
+    actionFn: async () => {
+      const colour = await prisma.colour.findUnique({
+        where: { id: colourId },
+      });
+      return colour;
+    },
+  });
+};
