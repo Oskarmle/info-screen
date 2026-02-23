@@ -32,3 +32,29 @@ export const infoScreenSchema = z.object({
   organizationId: z.string(),
   colourId: z.string(),
 });
+
+export const contentSchema = z.object({
+  name: z.string().min(2).max(100),
+  title: z.string().min(2).max(100),
+  text: z.string(),
+  image: z.preprocess((image) => {
+    if (image instanceof File && image.size > 0) {
+      return image;
+    } else {
+      return undefined;
+    }
+  }, z.instanceof(File).optional()),
+  contactEmail: z.preprocess((email) => {
+    if (typeof email === "string" && email === "") {
+      return undefined;
+    }
+    return email;
+  }, z.string().optional()),
+  contactName: z.preprocess((name) => {
+    if (typeof name === "string" && name === "") {
+      return undefined;
+    }
+    return name;
+  }, z.string().optional()),
+  organizationId: z.string(),
+});
