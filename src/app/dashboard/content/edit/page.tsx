@@ -2,7 +2,7 @@ import React from 'react'
 
 const Page = () => {
   return (
-    <div>Create content</div>
+    <div>Edit content</div>
   )
 }
 

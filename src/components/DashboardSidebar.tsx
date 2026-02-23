@@ -1,6 +1,7 @@
 import {
   Building2,
   CirclePlus,
+  Edit,
   List,
   Pencil,
   Settings,
@@ -64,13 +65,18 @@ const InfoScreenPages = [
 const infoScreensContent = [
   {
     title: "Create new",
-    href: "/dashboard/create-new-content",
+    href: "/dashboard/content/create",
     icon: <CirclePlus />,
   },
   {
     title: "See all content",
-    href: "/dashboard/see-all-content",
+    href: "/dashboard/content/see-all",
     icon: <List />,
+  },
+  {
+    title: "Edit contents",
+    href: "/dashboard/content/edit",
+    icon: <Edit />,
   },
 ];
 
