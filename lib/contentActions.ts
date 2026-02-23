@@ -1,0 +1,55 @@
+import { auth } from "./auth";
+import { prisma } from "./db/prisma";
+import { contentSchema } from "./db/schema";
+import { executeAction } from "./executeAction";
+
+export const createContent = async (formData: FormData) => {
+  return executeAction({
+    actionFn: async () => {
+      const session = await auth();
+      if (!session?.user?.id) {
+        throw new Error("Unauthorized");
+      }
+
+      const name = formData.get("name");
+      const title = formData.get("title");
+      const text = formData.get("text");
+      const image = formData.get("image");
+      const contactEmail = formData.get("contactEmail");
+      const contactName = formData.get("contactName");
+      const organizationId = formData.get("organizationId");
+      const validatedData = contentSchema.parse({
+        name,
+        title,
+        text,
+        image,
+        contactEmail,
+        contactName,
+        organizationId,
+      });
+
+      const membership = await prisma.userOrganization.findFirst({
+        where: {
+          userId: session.user.id,
+          organizationId: validatedData.organizationId,
+        },
+      });
+
+      if (!membership) throw new Error("Forbidden");
+
+      await prisma.content.create({
+        data: {
+          name: validatedData.name,
+          title: validatedData.title,
+          text: validatedData.text,
+          image: validatedData.image
+            ? (validatedData.image as File).name
+            : null,
+          contactEmail: validatedData.contactEmail,
+          contactName: validatedData.contactName,
+          organizationId: validatedData.organizationId,
+        },
+      });
+    },
+  });
+};
