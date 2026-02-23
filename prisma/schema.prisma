@@ -88,12 +88,13 @@ model Colour {
 }
 
 model Content {
-  id      String  @id @default(uuid())
-  name    String  @unique
-  title   String
-  text    String
-  image   String?
-  contact String?
+  id           String  @id @default(uuid())
+  name         String  @unique
+  title        String
+  text         String
+  image        String?
+  contactEmail String?
+  contactName  String?
 
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
