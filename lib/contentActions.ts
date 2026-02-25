@@ -53,3 +53,54 @@ export const createContent = async (formData: FormData) => {
     },
   });
 };
+
+export const fetchAllContentForOrganization = async (
+  organizationId: string,
+) => {
+  return executeAction({
+    actionFn: async () => {
+      const session = await auth();
+      if (!session?.user?.id) {
+        throw new Error("Unauthorized");
+      }
+
+      const membership = await prisma.userOrganization.findFirst({
+        where: {
+          userId: session.user.id,
+          organizationId: organizationId,
+        },
+      });
+
+      if (!membership) throw new Error("Forbidden");
+
+      const contents = await prisma.content.findMany({
+        where: { organizationId },
+      });
+
+      return contents;
+    },
+  });
+};
+
+export const fetchAllContentForInfoScreen = async (infoScreenId: string) => {
+  return executeAction({
+    actionFn: async () => {
+      const infoScreen = await prisma.infoScreen.findUnique({
+        where: { id: infoScreenId },
+      });
+
+      if (!infoScreen) throw new Error("Info screen not found");
+
+      const contents = await prisma.content.findMany({
+        where: {
+          organizationId: infoScreen.organizationId,
+          infoScreens: {
+            some: { id: infoScreenId },
+          },
+        },
+      });
+
+      return contents;
+    },
+  });
+};
