@@ -16,7 +16,7 @@ const Droppable = ({ id, children, listName }: DroppableProps) => {
   return (
     <div ref={ref} className="h-60 bg-accent rounded-lg flex flex-col p-2">
       <h1 className="text-lg font-bold pb-2 shrink-0">{listName}</h1>
-      <div className="flex flex-row gap-2 flex-1 min-h-0 overflow-auto">
+      <div className="flex flex-row gap-2 flex-1 min-h-0 overflow-auto rounded-lg">
         {children}
       </div>
     </div>
