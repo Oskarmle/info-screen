@@ -1,10 +1,13 @@
+import { fetchAllContentForInfoScreen } from "@/lib/contentActions";
 import { fetchInfoScreen } from "@/lib/infoScreenActions";
 
 const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;
   const infoScreen = await fetchInfoScreen(id);
 
-  console.log("Fetched info screen in page:", infoScreen);
+  const content = await fetchAllContentForInfoScreen(id);
+
+  console.log(content);
 
   return (
     <div>
