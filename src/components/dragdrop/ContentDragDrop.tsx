@@ -53,45 +53,51 @@ const ContentDragDrop = ({ contents, infoScreenId }: ContentDragDropProps) => {
         setItems((items) => move(items, event));
       }}
     >
-      <div className="flex flex-row gap-4 justify-between">
-        <Droppable2 id="all-content" listName="All content">
-          {items["all-content"].map((content, index) => (
-            <Draggable
-              column="all-content"
-              id={content.id}
-              index={index}
-              name={content.name}
-              title={content.title}
-              text={content.text}
-              key={content.id}
-              image={content.image}
-            />
-          ))}
-        </Droppable2>
-        <Droppable id="active-content" listName="Active content">
-          {items["active-content"].map((content, index) => (
-            <Draggable
-              column="active-content"
-              id={content.id}
-              index={index}
-              name={content.name}
-              title={content.title}
-              text={content.text}
-              key={content.id}
-              image={content.image}
-            />
-          ))}
-        </Droppable>
+      <div className="flex flex-col gap-2">
+        <div className="flex flex-row gap-2 justify-between">
+          <Droppable2 id="all-content" listName="All content">
+            {items["all-content"].map((content, index) => (
+              <Draggable
+                column="all-content"
+                id={content.id}
+                index={index}
+                name={content.name}
+                title={content.title}
+                text={content.text}
+                key={content.id}
+                image={content.image}
+              />
+            ))}
+          </Droppable2>
+          <Droppable id="active-content" listName="Active content">
+            {items["active-content"].map((content, index) => (
+              <Draggable
+                column="active-content"
+                id={content.id}
+                index={index}
+                name={content.name}
+                title={content.title}
+                text={content.text}
+                key={content.id}
+                image={content.image}
+              />
+            ))}
+          </Droppable>
+        </div>
+        <p className="text-sm text-muted-foreground pb-2">
+          Add or remove content from the info-screen. Remember to save before
+          closing the page.
+        </p>
+        <Button
+          className="w-1/2"
+          type="submit"
+          onClick={async () => {
+            await handleAddContent();
+          }}
+        >
+          Save content to infoScreen
+        </Button>
       </div>
-      <Button
-        className="w-1/2"
-        type="submit"
-        onClick={async () => {
-          await handleAddContent();
-        }}
-      >
-        Save content to infoScreen
-      </Button>
     </DragDropProvider>
   );
 };
