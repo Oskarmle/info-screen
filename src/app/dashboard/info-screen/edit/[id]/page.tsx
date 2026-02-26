@@ -7,13 +7,9 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;
   const infoScreen = await fetchInfoScreen(id);
 
-  console.log("Fetched info screen in page:", infoScreen);
-
   const contents = await fetchAllContentForOrganization(
     infoScreen.data?.organizationId || "",
   );
-
-  console.log("Fetched contents in page:", contents);
 
   return (
     <div
@@ -30,7 +26,10 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
         <h1 className="text-xl">{infoScreen.data?.title}</h1>
         <p>{infoScreen.data?.description}</p>
       </div>
-      <ContentDragDrop contents={contents?.data || []} />
+      <ContentDragDrop
+        infoScreenId={infoScreen.data?.id || ""}
+        contents={contents?.data || []}
+      />
     </div>
   );
 };
