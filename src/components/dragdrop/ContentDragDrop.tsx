@@ -7,32 +7,29 @@ import Droppable from "./Droppable";
 import { useState } from "react";
 import { Button } from "../ui/button";
 import { addContentToInfoScreen } from "@/lib/infoScreenActions";
+import { Prisma } from "@/generated/prisma/client";
 
-type Content = {
-  id: string;
-  name: string;
-  title: string;
-  text: string;
-  image: string | null;
-  contactEmail: string | null;
-  contactName: string | null;
-  organizationId: string;
-  createdAt: Date;
-  updatedAt: Date;
-};
+type ContentWithInfoScreens = Prisma.ContentGetPayload<{
+  include: { infoScreens: true };
+}>;
 
 type ContentDragDropProps = {
-  contents: Content[];
+  contents: ContentWithInfoScreens[];
   infoScreenId: string;
 };
 
 const ContentDragDrop = ({ contents, infoScreenId }: ContentDragDropProps) => {
   const [items, setItems] = useState<{
-    "all-content": Content[];
-    "active-content": Content[];
+    "all-content": ContentWithInfoScreens[];
+    "active-content": ContentWithInfoScreens[];
   }>({
-    "all-content": contents,
-    "active-content": [],
+    "all-content": contents.filter(
+      (content) =>
+        !content.infoScreens.some((screen) => screen.id === infoScreenId),
+    ),
+    "active-content": contents.filter((content) =>
+      content.infoScreens.some((screen) => screen.id === infoScreenId),
+    ),
   });
 
   return (
