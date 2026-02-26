@@ -120,7 +120,10 @@ export const deleteInfoScreen = async (infoScreenId: string) => {
   });
 };
 
-export const addContentToInfoScreen = async (infoScreenId: string, content: Content[]) => {
+export const addContentToInfoScreen = async (
+  infoScreenId: string,
+  content: Content[],
+) => {
   return executeAction({
     actionFn: async () => {
       const session = await auth();
@@ -151,6 +154,56 @@ export const addContentToInfoScreen = async (infoScreenId: string, content: Cont
               id: content.id,
             })),
           },
+        },
+      });
+    },
+  });
+};
+
+export const updateInfoScreen = async (
+  formData: FormData,
+  infoScreenId: string,
+) => {
+  return executeAction({
+    actionFn: async () => {
+      const session = await auth();
+      if (!session?.user?.id) {
+        throw new Error("Unauthorized");
+      }
+
+      const infoScreen = await prisma.infoScreen.findUnique({
+        where: { id: infoScreenId },
+      });
+
+      if (!infoScreen) throw new Error("Not found");
+
+      const title = formData.get("title");
+      const description = formData.get("description");
+      const organizationId = formData.get("organizationId");
+      const colourId = formData.get("colourId");
+      const validatedData = infoScreenSchema.parse({
+        title,
+        description,
+        organizationId,
+        colourId,
+      });
+
+      const membership = await prisma.userOrganization.findFirst({
+        where: {
+          userId: session.user.id,
+          organizationId: validatedData.organizationId,
+        },
+      });
+
+      if (!membership) throw new Error("Forbidden");
+
+      await prisma.infoScreen.update({
+        where: { id: infoScreenId },
+        data: {
+          title: validatedData.title,
+          description: validatedData.description,
+          organizationId: validatedData.organizationId,
+          colourId: validatedData.colourId,
         },
       });
     },
