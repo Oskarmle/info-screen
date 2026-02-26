@@ -5,6 +5,7 @@ import { auth } from "./auth";
 import { prisma } from "./db/prisma";
 import { infoScreenSchema } from "./db/schema";
 import { executeAction } from "./executeAction";
+import { Content } from "@/generated/prisma/client";
 
 export const createInfoScreen = async (formData: FormData) => {
   return executeAction({
@@ -115,6 +116,43 @@ export const deleteInfoScreen = async (infoScreenId: string) => {
       });
 
       revalidatePath("/dashboard/info-screen/see-all");
+    },
+  });
+};
+
+export const addContentToInfoScreen = async (infoScreenId: string, content: Content[]) => {
+  return executeAction({
+    actionFn: async () => {
+      const session = await auth();
+      if (!session?.user?.id) {
+        throw new Error("Unauthorized");
+      }
+
+      const infoScreen = await prisma.infoScreen.findUnique({
+        where: { id: infoScreenId },
+      });
+
+      if (!infoScreen) throw new Error("Not found");
+
+      const membership = await prisma.userOrganization.findFirst({
+        where: {
+          userId: session.user.id,
+          organizationId: infoScreen.organizationId,
+        },
+      });
+
+      if (!membership) throw new Error("Forbidden");
+
+      await prisma.infoScreen.update({
+        where: { id: infoScreenId },
+        data: {
+          contents: {
+            set: content.map((content) => ({
+              id: content.id,
+            })),
+          },
+        },
+      });
     },
   });
 };
