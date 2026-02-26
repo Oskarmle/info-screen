@@ -10,39 +10,24 @@ import {
   SelectValue,
 } from "./ui/select";
 
-// const colours = [
-//   {
-//     id: "1",
-//     name: "Default",
-//     oklch: "oklch(100.00% 0.000 0)",
-//   },
-//   {
-//     id: "2",
-//     name: "Blue",
-//     oklch: "oklch(42.97% 0.069 263.87)",
-//   },
-//   {
-//     id: "3",
-//     name: "Dark",
-//     oklch: "oklch(39.42% 0.000 0)",
-//   },
-//   {
-//     id: "4",
-//     name: "Green",
-//     oklch: "oklch(51.89% 0.099 138.53)",
-//   },
-// ];
-
 type Colour = { id: string; name: string; oklch: string };
 
-const ColourPickerInfoScreen = ({ colours }: { colours: Colour[] }) => {
-  const [selectedColourId, setSelectedColourId] = useState("");
+type ColourPickerInfoScreenProps = {
+  colours: Colour[];
+  defaultColourId?: string;
+};
+
+const ColourPickerInfoScreen = ({
+  colours,
+  defaultColourId = "",
+}: ColourPickerInfoScreenProps) => {
+  const [selectedColourId, setSelectedColourId] = useState(defaultColourId);
   const selectedColour = colours.find((c) => c.id === selectedColourId)?.oklch;
   return (
     <>
       <input type="hidden" name="colourId" value={selectedColourId} />
       <Select
-        defaultValue=""
+        defaultValue={defaultColourId}
         onValueChange={(value) => setSelectedColourId(value)}
       >
         <SelectTrigger id="colour-picker">
