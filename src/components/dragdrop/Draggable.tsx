@@ -32,7 +32,7 @@ const Draggable = ({
     <div
       ref={ref}
       data-dragging={isDragging}
-      className="flex flex-col p-4 bg-background rounded-lg cursor-pointer w-60 h-full overflow-hidden shrink-0"
+      className="flex flex-col p-4 bg-background rounded-lg cursor-pointer w-54 overflow-hidden shrink-0"
     >
       <h1 className="text-foreground">{name}</h1>
       <p className="text-foreground">{title}</p>

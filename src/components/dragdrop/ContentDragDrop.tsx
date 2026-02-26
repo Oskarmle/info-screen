@@ -9,6 +9,7 @@ import { Button } from "../ui/button";
 import { addContentToInfoScreen } from "@/lib/infoScreenActions";
 import { Prisma } from "@/generated/prisma/client";
 import { toast } from "sonner";
+import Droppable2 from "./Droppable2";
 
 type ContentWithInfoScreens = Prisma.ContentGetPayload<{
   include: { infoScreens: true };
@@ -52,34 +53,36 @@ const ContentDragDrop = ({ contents, infoScreenId }: ContentDragDropProps) => {
         setItems((items) => move(items, event));
       }}
     >
-      <Droppable id="all-content" listName="All content">
-        {items["all-content"].map((content, index) => (
-          <Draggable
-            column="all-content"
-            id={content.id}
-            index={index}
-            name={content.name}
-            title={content.title}
-            text={content.text}
-            key={content.id}
-            image={content.image}
-          />
-        ))}
-      </Droppable>
-      <Droppable id="active-content" listName="Active content">
-        {items["active-content"].map((content, index) => (
-          <Draggable
-            column="active-content"
-            id={content.id}
-            index={index}
-            name={content.name}
-            title={content.title}
-            text={content.text}
-            key={content.id}
-            image={content.image}
-          />
-        ))}
-      </Droppable>
+      <div className="flex flex-row gap-4 justify-between">
+        <Droppable2 id="all-content" listName="All content">
+          {items["all-content"].map((content, index) => (
+            <Draggable
+              column="all-content"
+              id={content.id}
+              index={index}
+              name={content.name}
+              title={content.title}
+              text={content.text}
+              key={content.id}
+              image={content.image}
+            />
+          ))}
+        </Droppable2>
+        <Droppable id="active-content" listName="Active content">
+          {items["active-content"].map((content, index) => (
+            <Draggable
+              column="active-content"
+              id={content.id}
+              index={index}
+              name={content.name}
+              title={content.title}
+              text={content.text}
+              key={content.id}
+              image={content.image}
+            />
+          ))}
+        </Droppable>
+      </div>
       <Button
         className="w-1/2"
         type="submit"
