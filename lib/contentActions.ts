@@ -75,6 +75,7 @@ export const fetchAllContentForOrganization = async (
 
       const contents = await prisma.content.findMany({
         where: { organizationId },
+        include: { infoScreens: true },
       });
 
       return contents;
@@ -97,6 +98,7 @@ export const fetchAllContentForInfoScreen = async (infoScreenId: string) => {
           infoScreens: {
             some: { id: infoScreenId },
           },
+          include: { infoScreens: true }
         },
       });
 
