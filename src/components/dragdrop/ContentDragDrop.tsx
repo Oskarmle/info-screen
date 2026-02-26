@@ -8,6 +8,7 @@ import { useState } from "react";
 import { Button } from "../ui/button";
 import { addContentToInfoScreen } from "@/lib/infoScreenActions";
 import { Prisma } from "@/generated/prisma/client";
+import { toast } from "sonner";
 
 type ContentWithInfoScreens = Prisma.ContentGetPayload<{
   include: { infoScreens: true };
@@ -31,6 +32,19 @@ const ContentDragDrop = ({ contents, infoScreenId }: ContentDragDropProps) => {
       content.infoScreens.some((screen) => screen.id === infoScreenId),
     ),
   });
+
+  const handleAddContent = async () => {
+    try {
+      await addContentToInfoScreen(infoScreenId, items["active-content"]);
+      toast.success("Content is saved to info screen", {
+        position: "bottom-right",
+      });
+    } catch (error) {
+      toast.error(`Something went wrong, ${error}`, {
+        position: "bottom-right",
+      });
+    }
+  };
 
   return (
     <DragDropProvider
@@ -69,9 +83,9 @@ const ContentDragDrop = ({ contents, infoScreenId }: ContentDragDropProps) => {
       <Button
         className="w-1/2"
         type="submit"
-        onClick={async () =>
-          await addContentToInfoScreen(infoScreenId, items["active-content"])
-        }
+        onClick={async () => {
+          await handleAddContent();
+        }}
       >
         Save content to infoScreen
       </Button>
