@@ -10,6 +10,7 @@ import {
 import { Button } from "./ui/button";
 import { deleteInfoScreen } from "@/lib/infoScreenActions";
 import { toast } from "sonner";
+import { redirect } from "next/navigation";
 
 type InfoScreenCardProps = {
   infoScreen: {
@@ -42,6 +43,10 @@ const InfoScreenCard = ({ infoScreen }: InfoScreenCardProps) => {
     } catch (err) {
       console.error(err);
     }
+  };
+
+  const handleEditInfoScreen = () => {
+    redirect(`/dashboard/info-screen/edit/${infoScreen.id}`);
   };
 
   return (
@@ -84,6 +89,9 @@ const InfoScreenCard = ({ infoScreen }: InfoScreenCardProps) => {
             }
           >
             Copy link
+          </Button>
+          <Button variant="outline" onClick={handleEditInfoScreen}>
+            Edit
           </Button>
         </div>
         <Button
