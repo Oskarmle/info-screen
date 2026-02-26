@@ -5,6 +5,8 @@ import { move } from "@dnd-kit/helpers";
 import Draggable from "./Draggable";
 import Droppable from "./Droppable";
 import { useState } from "react";
+import { Button } from "../ui/button";
+import { addContentToInfoScreen } from "@/lib/infoScreenActions";
 
 type Content = {
   id: string;
@@ -15,13 +17,16 @@ type Content = {
   contactEmail: string | null;
   contactName: string | null;
   organizationId: string;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 type ContentDragDropProps = {
   contents: Content[];
+  infoScreenId: string;
 };
 
-const ContentDragDrop = ({ contents }: ContentDragDropProps) => {
+const ContentDragDrop = ({ contents, infoScreenId }: ContentDragDropProps) => {
   const [items, setItems] = useState<{
     "all-content": Content[];
     "active-content": Content[];
@@ -34,9 +39,6 @@ const ContentDragDrop = ({ contents }: ContentDragDropProps) => {
     <DragDropProvider
       onDragOver={(event) => {
         setItems((items) => move(items, event));
-      }}
-      onDragEnd={() => {
-        console.log("Active content:", items["active-content"]);
       }}
     >
       <Droppable id="all-content" listName="All content">
@@ -67,6 +69,15 @@ const ContentDragDrop = ({ contents }: ContentDragDropProps) => {
           />
         ))}
       </Droppable>
+      <Button
+        className="w-1/2"
+        type="submit"
+        onClick={async () =>
+          await addContentToInfoScreen(infoScreenId, items["active-content"])
+        }
+      >
+        Save content to infoScreen
+      </Button>
     </DragDropProvider>
   );
 };
