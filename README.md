@@ -1,36 +1,31 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Info Screen
 
-## Getting Started
+A Next.js application for creating and managing digital info screens for organizations.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### Authentication
+- **Multi-provider login**: Sign in with GitHub, Google, or email/password credentials
+- **Session management**: Secure JWT-based authentication with NextAuth.js
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Organization Management
+- **Create organizations**: Set up organizations with name, address, CVR number, and logo
+- **Organization switching**: Easily switch between multiple organizations
+- **User membership**: Link users to organizations with admin/member roles and approval workflow (pending/approved/rejected status)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Info Screens
+- **Create & manage screens**: Build info screens with titles and descriptions
+- **Custom colour themes**: Assign colours to screens using OKLCH colour format
+- **Public viewing**: Display screens via shareable URLs (`/info-screen/[id]`)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Content Management
+- **Create content items**: Add content with name, title, text, images, and contact info
+- **Drag & drop assignment**: Use drag-and-drop to assign content to info screens
+- **Many-to-many relationships**: Content can be displayed on multiple info screens
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Tech Stack
+- **Framework**: Next.js 16 with Turbopack
+- **Database**: PostgreSQL with Prisma ORM
+- **Authentication**: NextAuth.js v5
+- **Styling**: Tailwind CSS 4, Radix UI, shadcn/ui
+- **Drag & Drop**: @dnd-kit/react
