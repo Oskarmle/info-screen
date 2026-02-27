@@ -98,8 +98,8 @@ export const fetchAllContentForInfoScreen = async (infoScreenId: string) => {
           infoScreens: {
             some: { id: infoScreenId },
           },
-          include: { infoScreens: true }
         },
+        include: { infoScreens: true },
       });
 
       return contents;
