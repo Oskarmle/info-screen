@@ -31,7 +31,14 @@ const ContentCard = ({ content }: contentCardProps) => {
             No image
           </div>
         ) : (
-          <Image src={content.image} className="h-30" alt="Content image" />
+          <div className="relative w-full h-30">
+            <Image
+              src={content.image}
+              fill
+              className="rounded-lg object-cover"
+              alt="Content image"
+            />
+          </div>
         )}
         <Separator />
         {content.contactEmail && content.contactName ? (
