@@ -40,9 +40,8 @@ export const contentSchema = z.object({
   image: z.preprocess((image) => {
     if (image instanceof File && image.size > 0) {
       return image;
-    } else {
-      return undefined;
     }
+    return undefined;
   }, z.instanceof(File).optional()),
   contactEmail: z.preprocess((email) => {
     if (typeof email === "string" && email === "") {

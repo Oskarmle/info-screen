@@ -1,7 +1,10 @@
+import { UTApi } from "uploadthing/server";
 import { auth } from "./auth";
 import { prisma } from "./db/prisma";
 import { contentSchema } from "./db/schema";
 import { executeAction } from "./executeAction";
+
+const utapi = new UTApi();
 
 export const createContent = async (formData: FormData) => {
   return executeAction({
@@ -14,7 +17,7 @@ export const createContent = async (formData: FormData) => {
       const name = formData.get("name");
       const title = formData.get("title");
       const text = formData.get("text");
-      const image = formData.get("image");
+      const image = formData.get("image") as File | null;
       const contactEmail = formData.get("contactEmail");
       const contactName = formData.get("contactName");
       const organizationId = formData.get("organizationId");
@@ -37,14 +40,21 @@ export const createContent = async (formData: FormData) => {
 
       if (!membership) throw new Error("Forbidden");
 
+      let imageUrl: string | null = null;
+      if (validatedData.image && validatedData.image.size > 0) {
+        const uploadResponse = await utapi.uploadFiles(validatedData.image);
+        if (uploadResponse.error) {
+          throw new Error("Failed to upload image");
+        }
+        imageUrl = uploadResponse.data.ufsUrl;
+      }
+
       await prisma.content.create({
         data: {
           name: validatedData.name,
           title: validatedData.title,
           text: validatedData.text,
-          image: validatedData.image
-            ? (validatedData.image as File).name
-            : null,
+          image: imageUrl,
           contactEmail: validatedData.contactEmail,
           contactName: validatedData.contactName,
           organizationId: validatedData.organizationId,
