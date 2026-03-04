@@ -1,4 +1,5 @@
 import { fetchAllContentForOrganization } from "@/lib/contentActions";
+import ContentCard from "@/src/components/ContentCard";
 import { ScrollArea } from "@/src/components/ui/scroll-area";
 import { cookies } from "next/headers";
 
@@ -12,8 +13,6 @@ const Page = async () => {
     await fetchAllContentForOrganization(selectedOrganizationId ?? "")
   ).data;
 
-  console.log(content);
-
   return (
     <div
       className="flex flex-col min-h-0 h-full w-full gap-4 rounded-lg px-4 pb-4"
@@ -26,16 +25,10 @@ const Page = async () => {
         but you can delete content that is not active on any info screen.
       </p>
       <ScrollArea className="flex-1 flex-col min-h-0 gap-4 pr-4 rounded-lg">
-        <div className="flex flex-row flex-wrap pb-4 justify-between gap-4">
-          <div className="w-[32%] h-100 bg-amber-100 rounded-lg"></div>
-          <div className="w-[32%] h-100 bg-amber-100 rounded-lg"></div>
-          <div className="w-[32%] h-100 bg-amber-100 rounded-lg"></div>
-          <div className="w-[32%] h-100 bg-amber-100 rounded-lg"></div>
-          <div className="w-[32%] h-100 bg-amber-100 rounded-lg"></div>
-          <div className="w-[32%] h-100 bg-amber-100 rounded-lg"></div>
-          <div className="w-[32%] h-100 bg-amber-100 rounded-lg"></div>
-          <div className="w-[32%] h-100 bg-amber-100 rounded-lg"></div>
-          <div className="w-[32%] h-100 bg-amber-100 rounded-lg"></div>
+        <div className="flex flex-wrap pb-4 justify-start gap-4">
+          {content?.map((content) => (
+            <ContentCard key={content.id} content={content} />
+          ))}
         </div>
       </ScrollArea>
     </div>
