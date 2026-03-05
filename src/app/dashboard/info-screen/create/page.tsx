@@ -1,3 +1,4 @@
+import { auth } from "@/lib/auth";
 import { fetchColours } from "@/lib/colourAction";
 import { createInfoScreen } from "@/lib/infoScreenActions";
 import ColourPickerInfoScreen from "@/src/components/ColourPickerInfoScreen";
@@ -15,6 +16,9 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 const Page = async () => {
+  const session = await auth();
+  if (!session) redirect("/sign-in");
+
   const cookieStore = await cookies();
   const selectedOrganizationId = cookieStore.get(
     "selectedOrganizationId",

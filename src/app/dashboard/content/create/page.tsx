@@ -1,3 +1,4 @@
+import { auth } from "@/lib/auth";
 import { createContent } from "@/lib/contentActions";
 import { Button } from "@/src/components/ui/button";
 import {
@@ -14,6 +15,9 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 const Page = async () => {
+  const session = await auth();
+  if (!session) redirect("/sign-in");
+
   const cookieStore = await cookies();
   const selectedOrganizationId = cookieStore.get(
     "selectedOrganizationId",

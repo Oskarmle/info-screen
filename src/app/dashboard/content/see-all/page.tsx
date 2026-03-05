@@ -1,9 +1,14 @@
+import { auth } from "@/lib/auth";
 import { fetchAllContentForOrganization } from "@/lib/contentActions";
 import ContentCard from "@/src/components/ContentCard";
 import { ScrollArea } from "@/src/components/ui/scroll-area";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 const Page = async () => {
+  const session = await auth();
+  if (!session) redirect("/sign-in");
+
   const cookieStore = await cookies();
   const selectedOrganizationId = cookieStore.get(
     "selectedOrganizationId",

@@ -1,3 +1,4 @@
+import { auth } from "@/lib/auth";
 import { fetchColour } from "@/lib/colourAction";
 import { fetchAllInfoScreenForOrganization } from "@/lib/infoScreenActions";
 import InfoScreenCard from "@/src/components/InfoScreenCard";
@@ -5,8 +6,12 @@ import { Button } from "@/src/components/ui/button";
 import { ScrollArea } from "@/src/components/ui/scroll-area";
 import { cookies } from "next/headers";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 const Page = async () => {
+  const session = await auth();
+  if (!session) redirect("/sign-in");
+
   const cookieStore = await cookies();
   const selectedOrganizationId = cookieStore.get(
     "selectedOrganizationId",

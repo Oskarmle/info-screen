@@ -1,10 +1,15 @@
+import { auth } from "@/lib/auth";
 import { fetchAllContentForOrganization } from "@/lib/contentActions";
 import { fetchInfoScreen } from "@/lib/infoScreenActions";
 import ContentDragDrop from "@/src/components/dragdrop/ContentDragDrop";
 import EditInfoScreen from "@/src/components/EditInfoScreen";
 import { Separator } from "@/src/components/ui/separator";
+import { redirect } from "next/navigation";
 
 const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
+  const session = await auth();
+  if (!session) redirect("/sign-in");
+
   const { id } = await params;
   const infoScreen = await fetchInfoScreen(id);
 
