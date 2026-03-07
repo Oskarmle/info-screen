@@ -44,7 +44,6 @@ const Page = async () => {
             if (res.success) {
               redirect("/dashboard");
             }
-            console.log(res);
           }}
         >
           <input

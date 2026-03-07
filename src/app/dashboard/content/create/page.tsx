@@ -45,7 +45,6 @@ const Page = async () => {
             if (res.success) {
               redirect("/dashboard/content/see-all");
             }
-            console.log(res);
           }}
         >
           <input
