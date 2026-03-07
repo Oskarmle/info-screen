@@ -75,9 +75,54 @@ export const fetchOrganization = async (organizationId: string) => {
         where: { id: organizationId },
       });
 
-      console.log("Fetched organization in action:", organization);
-
       return organization;
+    },
+  });
+};
+
+export const requestOrganizationMembership = async (organizationId: string) => {
+  return executeAction({
+    actionFn: async () => {
+      const session = await auth();
+      if (!session?.user?.id) {
+        throw new Error("Unauthorized");
+      }
+
+      const organization = await prisma.organization.findUnique({
+        where: { id: organizationId },
+      });
+
+      if (!organization) {
+        throw new Error("Organization not found");
+      }
+
+      await prisma.userOrganization.create({
+        data: {
+          userId: session.user.id,
+          organizationId,
+          isAdmin: false,
+        },
+      });
+
+      return { success: true };
+    },
+  });
+};
+
+export const fetchOrganizationForOneUser = async (userId: string) => {
+  return executeAction({
+    actionFn: async () => {
+      const session = await auth();
+      if (!session?.user?.id) {
+        throw new Error("Unauthorized");
+      }
+
+      const organizations = await prisma.userOrganization.findMany({
+        where: { userId },
+        include: { organization: true },
+      });
+
+      return organizations;
     },
   });
 };
