@@ -35,7 +35,7 @@ const OrganizationCard = ({ membership }: OrganizationCardProps) => {
   };
 
   return (
-    <Card key={membership.organization.id} className="w-[400px]">
+    <Card key={membership.organization.id} className="w-100">
       <CardHeader>
         <CardTitle>{membership.organization.name}</CardTitle>
         <CardDescription>
