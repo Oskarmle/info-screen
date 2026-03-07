@@ -1,5 +1,4 @@
 import { auth } from "@/lib/auth";
-import { prisma } from "@/lib/db/prisma";
 import DashboardSidebar from "@/src/components/DashboardSidebar";
 import NavBar from "@/src/components/NavBar";
 import { ThemeProvider } from "@/src/components/providers/ThemeProvider";
