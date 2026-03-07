@@ -15,6 +15,7 @@ import { Button } from "./ui/button";
 import { useTheme } from "next-themes";
 import { SidebarTrigger } from "./ui/sidebar";
 import { signOut } from "next-auth/react";
+import { handleSignOutAction } from "../utils/handleLogOut";
 
 type NavBarProps = {
   session?: {
@@ -30,6 +31,7 @@ const NavBar = ({ session }: NavBarProps) => {
   const { setTheme } = useTheme();
 
   const handleSignOut = async () => {
+    await handleSignOutAction()
     await signOut();
   };
 
