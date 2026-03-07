@@ -33,7 +33,6 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db/prisma";
 import { getSelectedOrganization } from "@/lib/organizationActions";
 import OrganizationSwitcher from "./OrganizationSwitcher";
-import { cookies } from "next/headers";
 import { fetchAllInfoScreenForOrganization } from "@/lib/infoScreenActions";
 
 const FooterPages = [
@@ -82,19 +81,14 @@ const infoScreensContent = [
 
 const DashboardSidebar = async () => {
   const session = await auth();
-  const cookieStore = await cookies();
-  const memberships = await prisma.userOrganization.findMany({
+  const userOrganizations = await prisma.userOrganization.findMany({
     where: { userId: session?.user?.id },
     include: { organization: true },
   });
   const savedOrganizationId = await getSelectedOrganization();
 
-  const selectedOrganizationId = cookieStore.get(
-    "selectedOrganizationId",
-  )?.value;
-
   const infoScreens = await fetchAllInfoScreenForOrganization(
-    selectedOrganizationId ?? "",
+    savedOrganizationId ?? "",
   );
 
   return (
@@ -102,12 +96,15 @@ const DashboardSidebar = async () => {
       <SidebarHeader>
         <OrganizationSwitcher
           key={"organization-switcher"}
-          organizations={memberships}
+          organizations={userOrganizations}
           defaultOrganization={savedOrganizationId}
         />
       </SidebarHeader>
       <SidebarSeparator />
       <SidebarContent>
+        <SidebarGroup>
+          <SidebarGroupLabel>General</SidebarGroupLabel>
+        </SidebarGroup>
         <SidebarGroup>
           <SidebarGroupLabel>Info Screens</SidebarGroupLabel>
           <SidebarGroupContent>
@@ -134,7 +131,9 @@ const DashboardSidebar = async () => {
                         {infoScreens.data.map((screen) => (
                           <SidebarMenuSubItem key={screen.id}>
                             <SidebarMenuSubButton asChild>
-                              <Link href={`/dashboard/info-screen/edit/${screen.id}`}>
+                              <Link
+                                href={`/dashboard/info-screen/edit/${screen.id}`}
+                              >
                                 <Tv /> {screen.title}
                               </Link>
                             </SidebarMenuSubButton>
