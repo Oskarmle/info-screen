@@ -1,3 +1,5 @@
+"use client";
+import { requestOrganizationMembership } from "@/lib/organizationActions";
 import { Button } from "./ui/button";
 import {
   Card,
@@ -6,6 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card";
+import { toast } from "sonner";
 
 type OrganizationCardProps = {
   membership: {
@@ -17,6 +20,20 @@ type OrganizationCardProps = {
 };
 
 const OrganizationCard = ({ membership }: OrganizationCardProps) => {
+  const handleRequestMembership = async () => {
+    const res = await requestOrganizationMembership(membership.organization.id);
+
+    if (res.success) {
+      toast.success("Your request has been send", {
+        position: "bottom-right",
+      });
+    } else {
+      toast.error("Failed to request membership, try again later", {
+        position: "bottom-right",
+      });
+    }
+  };
+
   return (
     <Card key={membership.organization.id} className="w-[400px]">
       <CardHeader>
@@ -30,7 +47,9 @@ const OrganizationCard = ({ membership }: OrganizationCardProps) => {
           If you wish to join this organization, please click the button below
           to request membership.
         </p>
-        <Button variant={"default"}>Request Membership</Button>
+        <Button variant={"default"} onClick={handleRequestMembership}>
+          Request Membership
+        </Button>
       </CardContent>
     </Card>
   );
