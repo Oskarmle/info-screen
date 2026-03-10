@@ -118,7 +118,7 @@ export const fetchOrganizationForOneUser = async (userId: string) => {
       }
 
       const organizations = await prisma.userOrganization.findMany({
-        where: { userId },
+        where: { userId, status: "APPROVED" },
         include: { organization: true },
       });
 
