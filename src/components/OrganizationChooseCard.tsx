@@ -23,6 +23,14 @@ const OrganizationChooseCard = async () => {
     session.user?.id || "",
   );
 
+  if (organizations?.data?.length === 0) {
+    redirect("/organization/create-or-join");
+  }
+
+  if (organizations?.data?.length === 1) {
+    redirect(`/api/select-organization?organizationId=${organizations.data[0].organizationId}`);
+  }
+
   return (
     <Card className="w-9/12">
       <CardHeader>
