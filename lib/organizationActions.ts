@@ -55,6 +55,9 @@ export const createOrganization = async (formData: FormData) => {
             create: {
               userId: session.user.id,
               isAdmin: true,
+              status: "APPROVED",
+              approvedAt: new Date(),
+              approvedBy: session.user.id,
             },
           },
         },

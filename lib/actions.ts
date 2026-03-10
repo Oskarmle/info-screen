@@ -1,5 +1,5 @@
 import { prisma } from "./db/prisma";
-import { userSchema } from "./db/schema";
+import { createUserSchema } from "./db/schema";
 import { executeAction } from "./executeAction";
 
 export const signUp = async (formData: FormData) => {
@@ -7,11 +7,13 @@ export const signUp = async (formData: FormData) => {
     actionFn: async () => {
       const email = formData.get("email");
       const password = formData.get("password");
-      const validatedData = userSchema.parse({ email, password });
+      const name = formData.get("name");
+      const validatedData = createUserSchema.parse({ email, password, name });
       await prisma.user.create({
         data: {
           email: validatedData.email,
           password: validatedData.password,
+          name: validatedData.name,
         },
       });
     },
