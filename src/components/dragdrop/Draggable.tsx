@@ -37,7 +37,15 @@ const Draggable = ({
       <h1 className="text-foreground">{name}</h1>
       <p className="text-foreground">{title}</p>
       <p className="text-foreground line-clamp-2">{text}</p>
-      {image && <Image src={image} alt={name} className="mt-2 rounded" />}
+      {image && (
+        <Image
+          width={100}
+          height={20}
+          src={image}
+          alt={name}
+          className="mt-2 rounded"
+        />
+      )}
     </div>
   );
 };
