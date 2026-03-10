@@ -31,7 +31,10 @@ import {
 } from "./ui/collapsible";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db/prisma";
-import { getSelectedOrganization } from "@/lib/organizationActions";
+import {
+  fetchOrganizationForOneUser,
+  getSelectedOrganization,
+} from "@/lib/organizationActions";
 import OrganizationSwitcher from "./OrganizationSwitcher";
 import { fetchAllInfoScreenForOrganization } from "@/lib/infoScreenActions";
 
@@ -81,10 +84,9 @@ const infoScreensContent = [
 
 const DashboardSidebar = async () => {
   const session = await auth();
-  const userOrganizations = await prisma.userOrganization.findMany({
-    where: { userId: session?.user?.id },
-    include: { organization: true },
-  });
+  const userOrganizationsResult = await fetchOrganizationForOneUser(
+    session?.user?.id || "",
+  );
   const savedOrganizationId = await getSelectedOrganization();
 
   const infoScreens = await fetchAllInfoScreenForOrganization(
@@ -96,7 +98,7 @@ const DashboardSidebar = async () => {
       <SidebarHeader>
         <OrganizationSwitcher
           key={"organization-switcher"}
-          organizations={userOrganizations}
+          organizations={userOrganizationsResult.success ? userOrganizationsResult.data || [] : []}
           defaultOrganization={savedOrganizationId}
         />
       </SidebarHeader>
