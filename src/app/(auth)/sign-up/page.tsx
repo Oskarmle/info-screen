@@ -40,6 +40,13 @@ const Page = async () => {
         }}
       >
         <Input
+          name="name"
+          placeholder="Full name"
+          type="name"
+          required
+          autoComplete="name"
+        />
+        <Input
           name="email"
           placeholder="Email"
           type="email"
