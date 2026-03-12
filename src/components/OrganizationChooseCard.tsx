@@ -46,11 +46,6 @@ const OrganizationChooseCard = async () => {
               <div className="flex justify-between items-center pr-4">
                 <CardHeader className="w-2/3">
                   <CardTitle>{organizations.organization.name}</CardTitle>
-                  <CardDescription>
-                    {organizations.organization.street}
-                    {", "}
-                    {organizations.organization.postalCode}
-                  </CardDescription>
                 </CardHeader>
                 <OrganizationSelectButton
                   organizationId={organizations.organization.id}
