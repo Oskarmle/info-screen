@@ -66,6 +66,27 @@ export const createOrganization = async (formData: FormData) => {
   });
 };
 
+export const fetchAllOrganizations = async () => {
+  return executeAction({
+    actionFn: async () => {
+      const session = await auth();
+      if (!session?.user?.id) {
+        throw new Error("Unauthorized");
+      }
+      const organizations = await prisma.organization.findMany({
+        where: {
+          userOrganizations: {
+            none: {
+              userId: session.user.id,
+            },
+          },
+        },
+      });
+      return organizations;
+    },
+  });
+};
+
 export const fetchOrganization = async (organizationId: string) => {
   return executeAction({
     actionFn: async () => {
