@@ -1,11 +1,14 @@
 import {
+  Building,
   Building2,
   CirclePlus,
   Edit,
-  List,
+  House,
   Pencil,
+  Presentation,
+  Rows3,
   Settings,
-  Tv,
+  Users,
 } from "lucide-react";
 import {
   Sidebar,
@@ -30,13 +33,25 @@ import {
   CollapsibleTrigger,
 } from "./ui/collapsible";
 import { auth } from "@/lib/auth";
-import { prisma } from "@/lib/db/prisma";
 import {
   fetchOrganizationForOneUser,
   getSelectedOrganization,
 } from "@/lib/organizationActions";
 import OrganizationSwitcher from "./OrganizationSwitcher";
 import { fetchAllInfoScreenForOrganization } from "@/lib/infoScreenActions";
+
+const generalPages = [
+  {
+    title: "Manage organization",
+    href: "/dashboard/management/organization",
+    icon: <Building />,
+  },
+  {
+    title: "Users",
+    href: "/dashboard/management/users",
+    icon: <Users />,
+  },
+];
 
 const FooterPages = [
   {
@@ -60,7 +75,7 @@ const InfoScreenPages = [
   {
     title: "See all info screens",
     href: "/dashboard/info-screen/see-all",
-    icon: <List />,
+    icon: <Rows3 />,
   },
 ];
 
@@ -73,7 +88,7 @@ const infoScreensContent = [
   {
     title: "See all content",
     href: "/dashboard/content/see-all",
-    icon: <List />,
+    icon: <Rows3 />,
   },
   {
     title: "Edit contents",
@@ -98,15 +113,46 @@ const DashboardSidebar = async () => {
       <SidebarHeader>
         <OrganizationSwitcher
           key={"organization-switcher"}
-          organizations={userOrganizationsResult.success ? userOrganizationsResult.data || [] : []}
+          organizations={
+            userOrganizationsResult.success
+              ? userOrganizationsResult.data || []
+              : []
+          }
           defaultOrganization={savedOrganizationId}
         />
       </SidebarHeader>
+      {/* <SidebarSeparator /> */}
+      <SidebarGroup>
+        <SidebarGroupLabel>Home</SidebarGroupLabel>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild>
+              <Link href="/dashboard">
+                <House /> Dashboard
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarGroup>
       <SidebarSeparator />
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>General</SidebarGroupLabel>
+          <SidebarGroupLabel>Management</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {generalPages.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild>
+                    <Link href={item.href}>
+                      {item.icon} {item.title}
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
         </SidebarGroup>
+        <SidebarSeparator />
         <SidebarGroup>
           <SidebarGroupLabel>Info Screens</SidebarGroupLabel>
           <SidebarGroupContent>
@@ -136,7 +182,7 @@ const DashboardSidebar = async () => {
                               <Link
                                 href={`/dashboard/info-screen/edit/${screen.id}`}
                               >
-                                <Tv /> {screen.title}
+                                <Presentation /> {screen.title}
                               </Link>
                             </SidebarMenuSubButton>
                           </SidebarMenuSubItem>
