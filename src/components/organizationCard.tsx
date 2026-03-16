@@ -9,19 +9,15 @@ import {
   CardTitle,
 } from "./ui/card";
 import { toast } from "sonner";
+import { Organization } from "@/generated/prisma/client";
 
 type OrganizationCardProps = {
-  membership: {
-    organization: {
-      id: string;
-      name: string;
-    };
-  };
+  organization: Organization;
 };
 
-const OrganizationCard = ({ membership }: OrganizationCardProps) => {
+const OrganizationCard = ({ organization }: OrganizationCardProps) => {
   const handleRequestMembership = async () => {
-    const res = await requestOrganizationMembership(membership.organization.id);
+    const res = await requestOrganizationMembership(organization.id);
 
     if (res.success) {
       toast.success("Your request has been send", {
@@ -35,9 +31,9 @@ const OrganizationCard = ({ membership }: OrganizationCardProps) => {
   };
 
   return (
-    <Card key={membership.organization.id} className="w-100">
+    <Card key={organization.id} className="w-100">
       <CardHeader>
-        <CardTitle>{membership.organization.name}</CardTitle>
+        <CardTitle>{organization.name}</CardTitle>
         <CardDescription>
           Some description about the organization.
         </CardDescription>

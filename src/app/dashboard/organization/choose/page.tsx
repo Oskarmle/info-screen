@@ -1,6 +1,8 @@
 import { auth } from "@/lib/auth";
-import { prisma } from "@/lib/db/prisma";
-import { createOrganization } from "@/lib/organizationActions";
+import {
+  createOrganization,
+  fetchAllOrganizations,
+} from "@/lib/organizationActions";
 import OrganizationCard from "@/src/components/organizationCard";
 import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
@@ -11,19 +13,7 @@ const Page = async () => {
   const session = await auth();
   if (!session) redirect("/sign-in");
 
-  const userOrganizations = await prisma.userOrganization.findMany({
-    include: { organization: true },
-  });
-
-  const userOrgIds = userOrganizations
-    .filter((m) => m.userId === session?.user?.id)
-    .map((m) => m.organizationId);
-
-  const filteredUserOrganizations = userOrganizations.filter(
-    (userOrganization) =>
-      userOrganization.userId !== session?.user?.id &&
-      !userOrgIds.includes(userOrganization.organizationId),
-  );
+  const organizations = await fetchAllOrganizations();
 
   return (
     <div
@@ -95,10 +85,10 @@ const Page = async () => {
           </form>
           <Separator orientation="vertical" />
           <div className="flex flex-col gap-6 overflow-auto pr-4 rounded-lg">
-            {filteredUserOrganizations.map((filteredUserOrganization) => (
+            {(organizations.data ?? []).map((organization) => (
               <OrganizationCard
-                key={filteredUserOrganization.organization.id}
-                membership={filteredUserOrganization}
+                key={organization.id}
+                organization={organization}
               />
             ))}
           </div>
