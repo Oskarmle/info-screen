@@ -12,6 +12,7 @@ import {
 } from "@/src/components/ui/card";
 import { Button } from "@/src/components/ui/button";
 import Link from "next/link";
+import { fetchAllInfoScreenForOrganization } from "@/lib/infoScreenActions";
 
 const Page = async () => {
   const session = await auth();
@@ -52,23 +53,28 @@ const Page = async () => {
       name: "Management",
       description: "Manage users and their access to the info screens",
       href: "/dashboard/management/users",
-      button: "Manage",
+      button: "Manage users",
     },
   ];
+
+  const infoScreens = await fetchAllInfoScreenForOrganization(selectedOrgId);
 
   return (
     <div
       className="flex flex-col gap-4 h-full w-full rounded-b-lg px-4"
       suppressHydrationWarning
     >
-      <div className="w-full flex items-start gap-4">
+      <div className="w-full flex items-stretch gap-4">
         {navButtons.map((button) => (
-          <Card key={button.name} className="w-full cursor-pointer pb-0">
-            <CardHeader>
+          <Card
+            key={button.name}
+            className="w-full flex flex-col cursor-pointer pb-0"
+          >
+            <CardHeader className="flex-1">
               <CardTitle>{button.name}</CardTitle>
               <CardDescription>{button.description}</CardDescription>
             </CardHeader>
-            <CardFooter className="flex justify-between bg-accent rounded-b-lg py-4 px-4">
+            <CardFooter className="flex justify-between bg-accent rounded-b-lg py-4 px-4 mt-auto">
               <Link href={button.href}>
                 <Button variant="default">{button.button}</Button>
               </Link>
@@ -86,62 +92,19 @@ const Page = async () => {
           </CardDescription>
         </CardHeader>
         <CardContent className="flex gap-2">
-          <Card className="w-full sm:w-[350px] h-[150px] cursor-pointer ">
-            <CardHeader className="min-w-0">
-              <CardTitle>Info screen 1</CardTitle>
-              <CardDescription className="line-clamp-2 overflow-hidden text-ellipsis">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-                sunt in culpa qui officia deserunt mollit anim id est laborum.
-              </CardDescription>
-            </CardHeader>
-          </Card>
-          <Card className="w-full sm:w-[350px] h-[150px] cursor-pointer">
-            <CardHeader className="min-w-0">
-              <CardTitle>Info screen 1</CardTitle>
-              <CardDescription className="line-clamp-2 overflow-hidden text-ellipsis">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-                sunt in culpa qui officia deserunt mollit anim id est laborum.
-              </CardDescription>
-            </CardHeader>
-          </Card>
-          <Card className="w-full sm:w-[350px] h-[150px] cursor-pointer">
-            <CardHeader className="min-w-0">
-              <CardTitle>Info screen 1</CardTitle>
-              <CardDescription className="line-clamp-2 overflow-hidden text-ellipsis">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-                sunt in culpa qui officia deserunt mollit anim id est laborum.
-              </CardDescription>
-            </CardHeader>
-          </Card>
-          <Card className="w-full sm:w-[350px] h-[150px] cursor-pointer">
-            <CardHeader className="min-w-0">
-              <CardTitle>Info screen 1</CardTitle>
-              <CardDescription className="line-clamp-2 overflow-hidden text-ellipsis">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-                sunt in culpa qui officia deserunt mollit anim id est laborum.
-              </CardDescription>
-            </CardHeader>
-          </Card>
+          {infoScreens?.data?.map((infoscreen) => (
+            <Card
+              key={infoscreen.id}
+              className="w-full sm:w-[350px] h-[150px] cursor-pointer "
+            >
+              <CardHeader className="min-w-0">
+                <CardTitle>{infoscreen.title}</CardTitle>
+                <CardDescription className="line-clamp-2 overflow-hidden text-ellipsis">
+                  {infoscreen.description}
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          ))}
         </CardContent>
         <CardFooter className="flex bg-accent rounded-b-lg py-4 px-4">
           <Link href="/dashboard/info-screen/see-all">
