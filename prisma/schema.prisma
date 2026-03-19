@@ -84,8 +84,8 @@ model Colour {
   id          String       @id @default(uuid())
   name        String       @unique
   oklch       String       @unique
-  accent      String?
-  textColour  String?
+  accent      String
+  textColour  String
   infoScreens InfoScreen[]
 }
 
