@@ -95,7 +95,7 @@ const Page = async () => {
           {infoScreens?.data?.map((infoscreen) => (
             <Card
               key={infoscreen.id}
-              className="w-full sm:w-[350px] h-[150px] cursor-pointer "
+              className="w-full sm:w-87.5 h-37.5 cursor-pointer "
             >
               <CardHeader className="min-w-0">
                 <CardTitle>{infoscreen.title}</CardTitle>
