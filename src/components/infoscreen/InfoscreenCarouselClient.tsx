@@ -66,16 +66,16 @@ const InfoscreenCarouselClient = ({ contentData, colour }: Props) => {
         Fade(),
       ]}
     >
-      <CarouselContent className="h-full">
+      <CarouselContent className="h-full flex">
         {contentData?.map((content) => (
           <CarouselItem key={content.id}>
             <div
-              className="rounded-lg border flex justify-between flex-col h-full p-8"
+              className="rounded-lg flex justify-between flex-col h-full p-8 max-w-500"
               style={{ backgroundColor: colour || "#ffffff" }}
             >
               <div className="flex flex-col gap-4 flex-1 min-h-0">
                 <h1 className="text-8xl font-bold shrink-0">{content.title}</h1>
-                <p className="text-4xl shrink-0">{content.text}</p>
+                <p className="text-4xl shrink-0 mb-4">{content.text}</p>
                 {content.image && (
                   <div className="relative w-full flex-1 min-h-0">
                     <Image
@@ -89,7 +89,7 @@ const InfoscreenCarouselClient = ({ contentData, colour }: Props) => {
                 )}
               </div>
               {content.contactEmail && content.contactName && (
-                <p className="text-lg mb-2">
+                <p className="text-lg mb-2 mt-4">
                   For more information, contact {content.contactName} on{" "}
                   {content.contactEmail}
                 </p>
