@@ -81,7 +81,7 @@ const InfoScreenPages = [
 
 const infoScreensContent = [
   {
-    title: "Create new",
+    title: "Create new content",
     href: "/dashboard/content/create",
     icon: <CirclePlus />,
   },
@@ -96,6 +96,26 @@ const infoScreensContent = [
     icon: <Edit />,
   },
 ];
+
+const SponsorsContent = [
+  {
+    title: "Add new sponsor",
+    href: "/dashboard/sponsors/create",
+    icon: <CirclePlus />,
+  },
+  {
+    title: "See all sponsors",
+    href: "/dashboard/sponsors/see-all",
+    icon: <Rows3 />,
+  },
+  {
+    title: "Edit current sponsors",
+    href: "/dashboard/sponsors/edit",
+    icon: <Edit />,
+  },
+];
+
+
 
 const DashboardSidebar = async () => {
   const session = await auth();
@@ -201,6 +221,23 @@ const DashboardSidebar = async () => {
           <SidebarGroupContent>
             <SidebarMenu>
               {infoScreensContent.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild>
+                    <Link href={item.href}>
+                      {item.icon} {item.title}
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+        <SidebarSeparator />
+        <SidebarGroup>
+          <SidebarGroupLabel>Sponsors</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {SponsorsContent.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <Link href={item.href}>
