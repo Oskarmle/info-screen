@@ -1,7 +1,5 @@
 import z from "zod";
 
-
-
 export const createUserSchema = z.object({
   email: z.email().trim().toLowerCase().trim(),
   password: z.string().min(6).max(128),
@@ -32,6 +30,17 @@ export const organizationSchema = z.object({
       return logo;
     }
   }, z.string().optional()),
+});
+
+export const sponsorSchema = z.object({
+  name: z.string().min(2).max(100),
+  image: z.preprocess((image) => {
+    if (image instanceof File && image.size > 0) {
+      return image;
+    }
+    return undefined;
+  }, z.instanceof(File).optional()),
+  organizationId: z.string(),
 });
 
 export const infoScreenSchema = z.object({
