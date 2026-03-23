@@ -16,9 +16,14 @@ import { useCallback, useEffect, useState } from "react";
 type Props = {
   contentData: Content[];
   colour: string;
+  textColour: string;
 };
 
-const InfoscreenCarouselClient = ({ contentData, colour }: Props) => {
+const InfoscreenCarouselClient = ({
+  contentData,
+  colour,
+  textColour,
+}: Props) => {
   const delay = 20000; // 20 seconds
   const [progress, setProgress] = useState(0);
   const [api, setApi] = useState<CarouselApi>();
@@ -70,20 +75,23 @@ const InfoscreenCarouselClient = ({ contentData, colour }: Props) => {
         {contentData?.map((content) => (
           <CarouselItem key={content.id}>
             <div
-              className="rounded-lg flex justify-between flex-col h-full p-8 max-w-500"
-              style={{ backgroundColor: colour || "#ffffff" }}
+              className="rounded-lg flex justify-between flex-col h-full p-8 border"
+              style={{
+                backgroundColor: colour || "#ffffff",
+                color: textColour || "#ffffff",
+              }}
             >
               <div className="flex flex-col gap-4 flex-1 min-h-0">
                 <h1 className="text-8xl font-bold shrink-0">{content.title}</h1>
                 <p className="text-4xl shrink-0 mb-4">{content.text}</p>
                 {content.image && (
-                  <div className="relative flex-1 w-250">
+                  <div className="relative flex-1 w-250 max-w-250">
                     <Image
                       alt="Content image for the info screen"
                       src={content.image}
                       fill
                       sizes="100vw"
-                      className="object-cover rounded-lg shadow-xl border-accent"
+                      className="object-fill rounded-lg shadow-xl border-accent"
                     />
                   </div>
                 )}

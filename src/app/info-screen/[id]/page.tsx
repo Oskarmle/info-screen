@@ -15,6 +15,7 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
         <InfoscreenCarousel
           infoscreenId={infoScreen.data?.id || ""}
           colour={colour.data?.oklch || "#ffffff"}
+          textColour={colour.data?.textColour || "#ffffff"}
         />
       </div>
       <SponsorBanner />

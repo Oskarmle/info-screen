@@ -4,11 +4,13 @@ import InfoscreenCarouselClient from "./InfoscreenCarouselClient";
 type InfoscreenCarouselProps = {
   infoscreenId: string;
   colour: string;
+  textColour: string;
 };
 
 const InfoscreenCarousel = async ({
   infoscreenId,
   colour,
+  textColour,
 }: InfoscreenCarouselProps) => {
   const content = await fetchAllContentForInfoScreen(infoscreenId);
 
@@ -16,6 +18,7 @@ const InfoscreenCarousel = async ({
     <InfoscreenCarouselClient
       contentData={content.data || []}
       colour={colour}
+      textColour={textColour}
     />
   );
 };
