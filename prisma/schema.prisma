@@ -61,6 +61,7 @@ model Organization {
   userOrganizations UserOrganization[]
   infoScreens       InfoScreen[]
   contents          Content[]
+  sponsors          Sponsor[]
 }
 
 model InfoScreen {
@@ -75,6 +76,7 @@ model InfoScreen {
   colourId String
 
   contents Content[] @relation("ContentInfoScreens")
+  sponsors Sponsor[] @relation("SponsorInfoScreens")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -87,6 +89,20 @@ model Colour {
   accent      String
   textColour  String
   infoScreens InfoScreen[]
+}
+
+model Sponsor {
+  id   String  @id @default(uuid())
+  name String  @unique
+  logo String?
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  infoScreens InfoScreen[] @relation("SponsorInfoScreens")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Content {
