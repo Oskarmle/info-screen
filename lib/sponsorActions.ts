@@ -1,8 +1,10 @@
+"use server";
 import { UTApi } from "uploadthing/server";
 import { auth } from "./auth";
 import { prisma } from "./db/prisma";
 import { executeAction } from "./executeAction";
 import { sponsorSchema } from "./db/schema";
+import { revalidatePath } from "next/cache";
 
 const utapi = new UTApi();
 
@@ -48,6 +50,53 @@ export const createSponsor = async (formData: FormData) => {
           organizationId: validatedData.organizationId,
         },
       });
+
+      revalidatePath("/dashboard/sponsor/create");
+    },
+  });
+};
+
+export const fetchAllSponsorsForOrganization = async (
+  organizationId: string,
+) => {
+  return executeAction({
+    actionFn: async () => {
+      const session = await auth();
+      if (!session?.user?.id) {
+        throw new Error("Unauthorized");
+      }
+
+      const membership = await prisma.userOrganization.findFirst({
+        where: {
+          userId: session.user.id,
+          organizationId: organizationId,
+        },
+      });
+
+      if (!membership) throw new Error("Forbidden");
+
+      const sponsors = await prisma.sponsor.findMany({
+        where: { organizationId },
+      });
+
+      return sponsors;
+    },
+  });
+};
+
+export const deleteSponsor = async (sponsorId: string) => {
+  return executeAction({
+    actionFn: async () => {
+      const session = await auth();
+      if (!session?.user?.id) {
+        throw new Error("Unauthorized");
+      }
+
+      await prisma.sponsor.delete({
+        where: { id: sponsorId },
+      });
+
+      revalidatePath("/dashboard/sponsor/create");
     },
   });
 };
