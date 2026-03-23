@@ -1,5 +1,9 @@
 import { auth } from "@/lib/auth";
-import { createSponsor } from "@/lib/sponsorActions";
+import {
+  createSponsor,
+  fetchAllSponsorsForOrganization,
+} from "@/lib/sponsorActions";
+import SponsorCard from "@/src/components/SponsorCard";
 import { Button } from "@/src/components/ui/button";
 import {
   Field,
@@ -23,6 +27,10 @@ const Page = async () => {
     "selectedOrganizationId",
   )?.value;
 
+  const sponsors = await fetchAllSponsorsForOrganization(
+    selectedOrganizationId ?? "",
+  );
+
   return (
     <div
       className="flex flex-col min-h-0 w-full gap-4 rounded-lg p-4"
@@ -35,12 +43,12 @@ const Page = async () => {
         <div className="flex justify-around w-full min-h-0 overflow-hidden">
           <form
             className="w-1/2 gap-4 flex flex-col rounded-lg"
-            encType="multipart/form-data"
             action={async (formData: FormData) => {
               "use server";
               const res = await createSponsor(formData);
               if (res.success) {
-                redirect("/dashboard");
+                formData.delete("name");
+                formData.delete("image");
               }
             }}
           >
@@ -79,7 +87,11 @@ const Page = async () => {
             </FieldSet>
           </form>
           <Separator orientation="vertical" />
-          <div className="flex flex-col gap-6 overflow-auto pr-4 rounded-lg"></div>
+          <div className="flex flex-col gap-4 overflow-auto pr-4 rounded-lg">
+            {sponsors?.data?.map((sponsor) => (
+              <SponsorCard key={sponsor.id} sponsor={sponsor} />
+            ))}
+          </div>
         </div>
       </div>
     </div>
