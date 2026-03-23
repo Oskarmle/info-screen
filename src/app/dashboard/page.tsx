@@ -84,7 +84,7 @@ const Page = async () => {
       </div>
       <Card className="pb-0">
         <CardHeader>
-          <CardTitle>Active info screens</CardTitle>
+          <CardTitle>Active info screens &quot;NOT IMPLEMENTED&quot;</CardTitle>
           <CardDescription>
             Here you can see the info screens that are active and being shown on
             the displays. You can click on them to see more details and manage

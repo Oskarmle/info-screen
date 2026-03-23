@@ -77,7 +77,7 @@ const InfoscreenCarouselClient = ({ contentData, colour }: Props) => {
                 <h1 className="text-8xl font-bold shrink-0">{content.title}</h1>
                 <p className="text-4xl shrink-0 mb-4">{content.text}</p>
                 {content.image && (
-                  <div className="relative w-full flex-1 min-h-0">
+                  <div className="relative flex-1 w-250">
                     <Image
                       alt="Content image for the info screen"
                       src={content.image}
