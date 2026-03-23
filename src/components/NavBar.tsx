@@ -16,8 +16,12 @@ import { useTheme } from "next-themes";
 import { SidebarTrigger } from "./ui/sidebar";
 import { signOut } from "next-auth/react";
 import { handleSignOutAction } from "../utils/handleLogOut";
+import type { Locale } from "@/src/i18n/config";
+import { messages } from "@/src/i18n/messages";
+import LocaleSwitcher from "./LocaleSwitcher";
 
 type NavBarProps = {
+  locale: Locale;
   session?: {
     user?: {
       name?: string | null;
@@ -27,11 +31,12 @@ type NavBarProps = {
   };
 };
 
-const NavBar = ({ session }: NavBarProps) => {
+const NavBar = ({ locale, session }: NavBarProps) => {
+  const t = messages[locale].navbar;
   const { setTheme } = useTheme();
 
   const handleSignOut = async () => {
-    await handleSignOutAction()
+    await handleSignOutAction();
     await signOut();
   };
 
@@ -40,23 +45,24 @@ const NavBar = ({ session }: NavBarProps) => {
       {/* collapseButton */}
       <SidebarTrigger />
       <div className="flex items-center justify-end gap-6 w-full">
+        <LocaleSwitcher locale={locale} />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="icon">
               <Sun className="h-[1.2rem] w-[1.2rem] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
               <Moon className="absolute h-[1.2rem] w-[1.2rem] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
-              <span className="sr-only">Toggle theme</span>
+              <span className="sr-only">{t.toggleTheme}</span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem onClick={() => setTheme("light")}>
-              Light
+              {t.light}
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => setTheme("dark")}>
-              Dark
+              {t.dark}
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => setTheme("system")}>
-              System
+              {t.system}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -65,7 +71,7 @@ const NavBar = ({ session }: NavBarProps) => {
             <Avatar>
               <AvatarImage src={session?.user?.image || undefined} />
               <AvatarFallback>CN</AvatarFallback>
-              <span className="sr-only">User settings</span>
+              <span className="sr-only">{t.userSettings}</span>
             </Avatar>
           </DropdownMenuTrigger>
           <DropdownMenuContent sideOffset={10} align="end">
@@ -73,18 +79,18 @@ const NavBar = ({ session }: NavBarProps) => {
               <DropdownMenuLabel>{session?.user?.name}</DropdownMenuLabel>
               <DropdownMenuItem>
                 <User />
-                Profile
+                {t.profile}
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <Users />
-                Team
+                {t.team}
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuGroup>
               <DropdownMenuSeparator />
               <DropdownMenuItem variant="destructive" onClick={handleSignOut}>
                 <LogOut />
-                Log out
+                {t.logOut}
               </DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>

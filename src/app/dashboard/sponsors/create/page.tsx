@@ -17,10 +17,14 @@ import { Input } from "@/src/components/ui/input";
 import { Separator } from "@/src/components/ui/separator";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { getServerLocale } from "@/src/i18n/server";
+import { dashboardMessages } from "@/src/i18n/dashboardMessages";
 
 const Page = async () => {
   const session = await auth();
   if (!session) redirect("/sign-in");
+  const locale = await getServerLocale();
+  const t = dashboardMessages[locale].sponsorsCreate;
 
   const cookieStore = await cookies();
   const selectedOrganizationId = cookieStore.get(
@@ -37,7 +41,7 @@ const Page = async () => {
       suppressHydrationWarning
     >
       <div className="flex flex-col gap-1">
-        <h1 className="text-2xl font-bold">Sponsor Dashboard</h1>
+        <h1 className="text-2xl font-bold">{t.title}</h1>
       </div>
       <div className="flex flex-1 mt-4 min-h-0 w-full">
         <div className="flex justify-around w-full min-h-0 overflow-hidden">
@@ -58,16 +62,14 @@ const Page = async () => {
               value={selectedOrganizationId ?? ""}
             />
             <FieldSet>
-              <FieldLegend>Add a new sponsor</FieldLegend>
-              <FieldDescription>
-                You can add your sponsors on the different infoscreens after
-              </FieldDescription>
+              <FieldLegend>{t.formLegend}</FieldLegend>
+              <FieldDescription>{t.formDescription}</FieldDescription>
               <FieldGroup>
                 <Field>
-                  <FieldLabel htmlFor="name">Add the sponsors name</FieldLabel>
+                  <FieldLabel htmlFor="name">{t.sponsorNameLabel}</FieldLabel>
                   <Input
                     id="name"
-                    placeholder="Sponsor name"
+                    placeholder={t.sponsorNamePlaceholder}
                     required
                     name="name"
                     type="text"
@@ -75,12 +77,12 @@ const Page = async () => {
                   />
                 </Field>
                 <Field>
-                  <FieldLabel htmlFor="image">Add an image</FieldLabel>
+                  <FieldLabel htmlFor="image">{t.sponsorImageLabel}</FieldLabel>
                   <Input type="file" id="image" name="image" />
                 </Field>
                 <Field>
                   <Button variant="default" type="submit">
-                    Add sponsor
+                    {t.submit}
                   </Button>
                 </Field>
               </FieldGroup>
@@ -89,7 +91,7 @@ const Page = async () => {
           <Separator orientation="vertical" />
           <div className="flex flex-col gap-4 overflow-auto pr-4 rounded-lg">
             {sponsors?.data?.map((sponsor) => (
-              <SponsorCard key={sponsor.id} sponsor={sponsor} />
+              <SponsorCard key={sponsor.id} sponsor={sponsor} locale={locale} />
             ))}
           </div>
         </div>

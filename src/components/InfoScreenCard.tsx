@@ -10,9 +10,13 @@ import {
 import { Button } from "./ui/button";
 import { deleteInfoScreen } from "@/lib/infoScreenActions";
 import { toast } from "sonner";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
+import type { Locale } from "@/src/i18n/config";
+import { withLocalePath } from "@/src/i18n/config";
+import { dashboardMessages } from "@/src/i18n/dashboardMessages";
 
 type InfoScreenCardProps = {
+  locale: Locale;
   infoScreen: {
     id: string;
     title: string;
@@ -29,7 +33,10 @@ type InfoScreenCardProps = {
   };
 };
 
-const InfoScreenCard = ({ infoScreen }: InfoScreenCardProps) => {
+const InfoScreenCard = ({ infoScreen, locale }: InfoScreenCardProps) => {
+  const router = useRouter();
+  const t = dashboardMessages[locale].components.infoScreenCard;
+
   const deleteInfoScreenHandler = async (id: string) => {
     await deleteInfoScreen(id);
   };
@@ -37,7 +44,7 @@ const InfoScreenCard = ({ infoScreen }: InfoScreenCardProps) => {
   const copyToClipboard = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
-      toast.success("Link copied to clipboard", {
+      toast.success(t.copiedToast, {
         position: "bottom-right",
       });
     } catch (err) {
@@ -46,7 +53,7 @@ const InfoScreenCard = ({ infoScreen }: InfoScreenCardProps) => {
   };
 
   const handleEditInfoScreen = () => {
-    redirect(`/dashboard/info-screen/edit/${infoScreen.id}`);
+    router.push(withLocalePath(locale, `/dashboard/info-screen/edit/${infoScreen.id}`));
   };
 
   return (
@@ -59,7 +66,7 @@ const InfoScreenCard = ({ infoScreen }: InfoScreenCardProps) => {
         {/* FIXME: correct links when deployed */}
         <div className="flex flex-col gap-6">
           <div className="flex flex-col">
-            <p className="text-sm">The link to the info screen is:</p>
+            <p className="text-sm">{t.linkLabel}</p>
             <p className="text-sm">
               http://localhost:3000/info-screen/{infoScreen.id}
             </p>
@@ -68,7 +75,7 @@ const InfoScreenCard = ({ infoScreen }: InfoScreenCardProps) => {
             className="flex justify-center items-center h-9 rounded-lg border text-sm"
             style={{ backgroundColor: infoScreen.colour?.oklch }}
           >
-            The color of the info-screen
+            {t.colourLabel}
           </div>
         </div>
       </CardContent>
@@ -77,8 +84,9 @@ const InfoScreenCard = ({ infoScreen }: InfoScreenCardProps) => {
           <a
             href={`http://localhost:3000/info-screen/${infoScreen.id}`}
             target="_blank"
+            rel="noopener noreferrer"
           >
-            <Button variant="default">Go to info-screen</Button>
+            <Button variant="default">{t.openButton}</Button>
           </a>
           <Button
             variant="outline"
@@ -88,17 +96,17 @@ const InfoScreenCard = ({ infoScreen }: InfoScreenCardProps) => {
               )
             }
           >
-            Copy link
+            {t.copyButton}
           </Button>
           <Button variant="outline" onClick={handleEditInfoScreen}>
-            Edit
+            {t.editButton}
           </Button>
         </div>
         <Button
           variant="destructive"
           onClick={() => deleteInfoScreenHandler(infoScreen.id)}
         >
-          Delete
+          {t.deleteButton}
         </Button>
       </CardFooter>
     </Card>

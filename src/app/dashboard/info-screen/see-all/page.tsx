@@ -7,10 +7,15 @@ import { ScrollArea } from "@/src/components/ui/scroll-area";
 import { cookies } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { getServerLocale } from "@/src/i18n/server";
+import { dashboardMessages } from "@/src/i18n/dashboardMessages";
+import { withLocalePath } from "@/src/i18n/config";
 
 const Page = async () => {
   const session = await auth();
   if (!session) redirect("/sign-in");
+  const locale = await getServerLocale();
+  const t = dashboardMessages[locale].infoScreenSeeAll;
 
   const cookieStore = await cookies();
   const selectedOrganizationId = cookieStore.get(
@@ -33,19 +38,15 @@ const Page = async () => {
       className="flex flex-col min-h-0 h-full w-full gap-4 rounded-lg px-4 pb-4"
       suppressHydrationWarning
     >
-      <h1 className="text-2xl font-bold">This is all the info screens</h1>
-      <p>
-        This list shows all the info screens that have been created for this
-        organization. You can get a link to share the info screen or delete it
-        if you no longer need it.
-      </p>
-      <Link href="/dashboard/info-screen/create" className="w-fit">
-        <Button variant="secondary">Create a info screen</Button>
+      <h1 className="text-2xl font-bold">{t.title}</h1>
+      <p>{t.description}</p>
+      <Link href={withLocalePath(locale, "/dashboard/info-screen/create")} className="w-fit">
+        <Button variant="secondary">{t.createButton}</Button>
       </Link>
       <ScrollArea className="flex-1 min-h-0 pr-4 rounded-lg">
         <div className="flex flex-col gap-4 pb-4">
           {infoScreensWithColours.map((infoScreen) => (
-            <InfoScreenCard key={infoScreen.id} infoScreen={infoScreen} />
+            <InfoScreenCard key={infoScreen.id} infoScreen={infoScreen} locale={locale} />
           ))}
         </div>
       </ScrollArea>

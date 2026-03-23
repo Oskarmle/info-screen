@@ -3,18 +3,24 @@ import DashboardSidebar from "@/src/components/DashboardSidebar";
 import NavBar from "@/src/components/NavBar";
 import { ThemeProvider } from "@/src/components/providers/ThemeProvider";
 import { SidebarProvider } from "@/src/components/ui/sidebar";
-import { defaultLocale, isLocale } from "@/src/i18n/config";
-import { cookies } from "next/headers";
+import { isLocale, type Locale } from "@/src/i18n/config";
+import { notFound } from "next/navigation";
 
 export default async function DashboardLayout({
   children,
+  params,
 }: {
   children: React.ReactNode;
+  params: Promise<{ locale: string }>;
 }) {
+  const { locale: localeParam } = await params;
+
+  if (!isLocale(localeParam)) {
+    notFound();
+  }
+
+  const locale: Locale = localeParam;
   const session = await auth();
-  const cookieStore = await cookies();
-  const cookieLocale = cookieStore.get("NEXT_LOCALE")?.value;
-  const locale = cookieLocale && isLocale(cookieLocale) ? cookieLocale : defaultLocale;
 
   return (
     <div

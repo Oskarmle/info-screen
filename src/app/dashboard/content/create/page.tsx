@@ -14,10 +14,15 @@ import { ScrollArea } from "@/src/components/ui/scroll-area";
 import { Textarea } from "@/src/components/ui/textarea";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { getServerLocale } from "@/src/i18n/server";
+import { dashboardMessages } from "@/src/i18n/dashboardMessages";
+import { withLocalePath } from "@/src/i18n/config";
 
 const Page = async () => {
   const session = await auth();
   if (!session) redirect("/sign-in");
+  const locale = await getServerLocale();
+  const t = dashboardMessages[locale].contentCreate;
 
   const cookieStore = await cookies();
   const selectedOrganizationId = cookieStore.get(
@@ -30,12 +35,8 @@ const Page = async () => {
       suppressHydrationWarning
     >
       <div className="flex flex-col gap-1">
-        <h1 className="text-2xl font-bold">Create new content</h1>
-        <p className="text-sm">
-          You can create content for your info-screen here. You also have the
-          option to add it to an info-screen after you save it. You can always
-          edit/delete thh content later.
-        </p>
+        <h1 className="text-2xl font-bold">{t.title}</h1>
+        <p className="text-sm">{t.intro}</p>
       </div>
       <ScrollArea className="min-h-0 flex-1 pr-4">
         <div className="w-full">
@@ -45,7 +46,7 @@ const Page = async () => {
               "use server";
               const res = await createContent(formData);
               if (res.success) {
-                redirect("/dashboard/content/see-all");
+                redirect(withLocalePath(locale, "/dashboard/content/see-all"));
               }
             }}
           >
@@ -59,49 +60,42 @@ const Page = async () => {
                 <FieldGroup>
                   <Field>
                     <FieldLabel htmlFor="name">
-                      Give a name to your content
+                      {t.nameLabel}
                     </FieldLabel>
                     <Input
                       id="name"
-                      placeholder="Name"
+                      placeholder={t.namePlaceholder}
                       required
                       name="name"
                       type="text"
                       autoComplete="name"
                     />
-                    <FieldDescription>
-                      This will help you find it later when you want to add it
-                      to an info screen. It will not be used as the title for
-                      your info screen.
-                    </FieldDescription>
+                    <FieldDescription>{t.nameHelp}</FieldDescription>
                   </Field>
 
                   <FieldSeparator />
 
                   <Field>
                     <FieldLabel htmlFor="title">
-                      Give your content a title
+                      {t.titleLabel}
                     </FieldLabel>
                     <Input
                       id="title"
-                      placeholder="Title"
+                      placeholder={t.titlePlaceholder}
                       required
                       name="title"
                       type="text"
                       autoComplete="title"
                     />
-                    <FieldDescription>
-                      This will be shown on the info-screen for this piece of
-                      content.
-                    </FieldDescription>
+                    <FieldDescription>{t.titleHelp}</FieldDescription>
                   </Field>
 
                   <Field>
                     <FieldLabel htmlFor="text">
-                      The main text for your content
+                      {t.textLabel}
                     </FieldLabel>
                     <Textarea
-                      placeholder="Write the main text for your content here"
+                      placeholder={t.textPlaceholder}
                       id="text"
                       required
                       name="text"
@@ -112,28 +106,26 @@ const Page = async () => {
 
                   <Field>
                     <FieldLabel htmlFor="image">
-                      Add an image (optional)
+                      {t.imageLabel}
                     </FieldLabel>
                     <Input type="file" id="image" name="image" />
-                    <FieldDescription>
-                      Select a image to upload. This is optional.
-                    </FieldDescription>
+                    <FieldDescription>{t.imageHelp}</FieldDescription>
                   </Field>
                 </FieldGroup>
               </FieldSet>
               <FieldSet>
                 <FieldGroup>
                   <FieldLabel htmlFor="contactName" className="text-lg">
-                    Add contact information (optional)
+                    {t.contactSectionTitle}
                   </FieldLabel>
                   <div className="flex flex-row w-full gap-4">
                     <Field>
                       <FieldLabel htmlFor="contactEmail">
-                        Contact email
+                        {t.contactEmailLabel}
                       </FieldLabel>
                       <Input
                         id="contactEmail"
-                        placeholder="E-mail"
+                        placeholder={t.contactEmailPlaceholder}
                         name="contactEmail"
                         type="text"
                         autoComplete="contactEmail"
@@ -142,32 +134,24 @@ const Page = async () => {
 
                     <Field>
                       <FieldLabel htmlFor="contactName">
-                        Contact name
+                        {t.contactNameLabel}
                       </FieldLabel>
                       <Input
                         id="contactName"
-                        placeholder="First and last name"
+                        placeholder={t.contactNamePlaceholder}
                         name="contactName"
                         type="text"
                         autoComplete="contactName"
                       />
                     </Field>
                   </div>
-                  <FieldDescription>
-                    If you want to add contact information for this content, you
-                    can add it here. This is optional. It will be shown as
-                    <span>
-                      &quot;For more information, contact FirstName LastName on
-                      email@email.com&quot;
-                    </span>
-                    on the info-screen.
-                  </FieldDescription>
+                  <FieldDescription>{t.contactHelp}</FieldDescription>
                 </FieldGroup>
               </FieldSet>
               <Field>
-                <Button type="submit">Create content</Button>
+                <Button type="submit">{t.submit}</Button>
                 <Button variant="outline" type="button">
-                  Cancel
+                  {t.cancel}
                 </Button>
               </Field>
             </FieldGroup>

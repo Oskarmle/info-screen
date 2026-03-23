@@ -10,21 +10,26 @@ import {
 } from "./ui/card";
 import { toast } from "sonner";
 import { Organization } from "@/generated/prisma/client";
+import type { Locale } from "@/src/i18n/config";
+import { dashboardMessages } from "@/src/i18n/dashboardMessages";
 
 type OrganizationCardProps = {
   organization: Organization;
+  locale: Locale;
 };
 
-const OrganizationCard = ({ organization }: OrganizationCardProps) => {
+const OrganizationCard = ({ organization, locale }: OrganizationCardProps) => {
+  const t = dashboardMessages[locale].components.organizationCard;
+
   const handleRequestMembership = async () => {
     const res = await requestOrganizationMembership(organization.id);
 
     if (res.success) {
-      toast.success("Your request has been send", {
+      toast.success(t.successToast, {
         position: "bottom-right",
       });
     } else {
-      toast.error("Failed to request membership, try again later", {
+      toast.error(t.errorToast, {
         position: "bottom-right",
       });
     }
@@ -34,17 +39,12 @@ const OrganizationCard = ({ organization }: OrganizationCardProps) => {
     <Card key={organization.id} className="w-100">
       <CardHeader>
         <CardTitle>{organization.name}</CardTitle>
-        <CardDescription>
-          Some description about the organization.
-        </CardDescription>
+        <CardDescription>{t.description}</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
-        <p className="text-sm">
-          If you wish to join this organization, please click the button below
-          to request membership.
-        </p>
+        <p className="text-sm">{t.body}</p>
         <Button variant={"default"} onClick={handleRequestMembership}>
-          Request Membership
+          {t.requestButton}
         </Button>
       </CardContent>
     </Card>
