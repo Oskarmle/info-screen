@@ -8,6 +8,7 @@ import { Button } from "./ui/button";
 import { InfoScreen } from "@/generated/prisma/client";
 import { updateInfoScreen } from "@/lib/infoScreenActions";
 import { toast } from "sonner";
+import { redirect } from "next/navigation";
 
 type Colour = { id: string; name: string; oklch: string };
 
@@ -32,6 +33,10 @@ const EditInfoScreenForm = ({
       });
     }
   };
+
+  const handleCancel = () => {
+    redirect("/dashboard/info-screen/see-all");
+  }
 
   return (
     <form action={handleSubmit}>
@@ -75,7 +80,11 @@ const EditInfoScreenForm = ({
           </Field>
           <Field className="flex flex-col gap-2 justify-between">
             <Button type="submit">Submit</Button>
-            <Button variant="outline" type="button">
+            <Button
+              variant="outline"
+              type="button"
+              onClick={handleCancel}
+            >
               Cancel
             </Button>
           </Field>
