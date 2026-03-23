@@ -1,7 +1,6 @@
 import { fetchAllSponsorsForOrganization } from "@/lib/sponsorActions";
 import { cookies } from "next/headers";
 import Image from "next/image";
-import { Separator } from "../ui/separator";
 
 const SponsorBanner = async () => {
   const cookieStore = await cookies();
