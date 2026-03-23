@@ -10,12 +10,17 @@ import {
 import { Button } from "./ui/button";
 import Image from "next/image";
 import { Separator } from "./ui/separator";
+import type { Locale } from "@/src/i18n/config";
+import { dashboardMessages } from "@/src/i18n/dashboardMessages";
 
 type contentCardProps = {
   content: Content;
+  locale: Locale;
 };
 
-const ContentCard = ({ content }: contentCardProps) => {
+const ContentCard = ({ content, locale }: contentCardProps) => {
+  const t = dashboardMessages[locale].components.contentCard;
+
   return (
     <Card
       key={content.id}
@@ -28,7 +33,7 @@ const ContentCard = ({ content }: contentCardProps) => {
       <CardContent className="flex flex-col justify-center gap-2">
         {!content.image ? (
           <div className="w-full h-30 bg-muted rounded-lg flex items-center justify-center mb-1">
-            No image
+            {t.noImage}
           </div>
         ) : (
           <div className="relative w-full h-30">
@@ -36,14 +41,14 @@ const ContentCard = ({ content }: contentCardProps) => {
               src={content.image}
               fill
               className="rounded-lg object-cover"
-              alt="Content image"
+              alt={t.imageAlt}
             />
           </div>
         )}
         <Separator />
         {content.contactEmail && content.contactName ? (
           <div className="h-15">
-            <p>Contact information</p>
+            <p>{t.contactInfo}</p>
             <p className="text-muted-foreground text-sm">
               {content.contactName}
             </p>
@@ -52,12 +57,12 @@ const ContentCard = ({ content }: contentCardProps) => {
             </p>
           </div>
         ) : (
-          <p className="h-15">No contact information added for this content</p>
+          <p className="h-15">{t.noContactInfo}</p>
         )}
       </CardContent>
       <CardFooter className="flex justify-between bg-accent rounded-b-lg py-4 border-t">
-        <Button variant="destructive">Delete content</Button>
-        <Button variant="outline">Edit content</Button>
+        <Button variant="destructive">{t.deleteButton}</Button>
+        <Button variant="outline">{t.editButton}</Button>
       </CardFooter>
     </Card>
   );

@@ -40,75 +40,98 @@ import {
 } from "@/lib/organizationActions";
 import OrganizationSwitcher from "./OrganizationSwitcher";
 import { fetchAllInfoScreenForOrganization } from "@/lib/infoScreenActions";
+import { messages } from "@/src/i18n/messages";
+import type { Locale } from "@/src/i18n/config";
 
-const generalPages = [
-  {
-    title: "Manage organization",
-    href: "/dashboard/management/organization",
-    icon: <Building />,
-  },
-  {
-    title: "Users",
-    href: "/dashboard/management/users",
-    icon: <Users />,
-  },
-];
+const withLocale = (locale: Locale, href: string) => `/${locale}${href}`;
 
-const FooterPages = [
-  {
-    title: "Organizations",
-    href: "/dashboard/organization/choose",
-    icon: <Building2 />,
-  },
-  {
-    title: "Settings",
-    href: "/dashboard/settings",
-    icon: <Settings />,
-  },
-];
+const buildGeneralPages = (locale: Locale) => {
+  const t = messages[locale].sidebar;
+  return [
+    {
+      title: t.manageOrganization,
+      href: withLocale(locale, "/dashboard/management/organization"),
+      icon: <Building />,
+    },
+    {
+      title: t.users,
+      href: withLocale(locale, "/dashboard/management/users"),
+      icon: <Users />,
+    },
+  ];
+};
 
-const InfoScreenPages = [
-  {
-    title: "Create new info screen",
-    href: "/dashboard/info-screen/create",
-    icon: <CirclePlus />,
-  },
-  {
-    title: "See all info screens",
-    href: "/dashboard/info-screen/see-all",
-    icon: <Rows3 />,
-  },
-];
+const buildFooterPages = (locale: Locale) => {
+  const t = messages[locale].sidebar;
+  return [
+    {
+      title: t.organizations,
+      href: withLocale(locale, "/dashboard/organization/choose"),
+      icon: <Building2 />,
+    },
+    {
+      title: t.settings,
+      href: withLocale(locale, "/dashboard/settings"),
+      icon: <Settings />,
+    },
+  ];
+};
 
-const infoScreensContent = [
-  {
-    title: "Create new content",
-    href: "/dashboard/content/create",
-    icon: <CirclePlus />,
-  },
-  {
-    title: "See all content",
-    href: "/dashboard/content/see-all",
-    icon: <Rows3 />,
-  },
-  {
-    title: "Edit contents",
-    href: "/dashboard/content/edit",
-    icon: <Edit />,
-  },
-];
+const buildInfoScreenPages = (locale: Locale) => {
+  const t = messages[locale].sidebar;
+  return [
+    {
+      title: t.createInfoScreen,
+      href: withLocale(locale, "/dashboard/info-screen/create"),
+      icon: <CirclePlus />,
+    },
+    {
+      title: t.seeAllInfoScreens,
+      href: withLocale(locale, "/dashboard/info-screen/see-all"),
+      icon: <Rows3 />,
+    },
+  ];
+};
 
-const SponsorsContent = [
-  {
-    title: "Manage sponsors",
-    href: "/dashboard/sponsors/create",
-    icon: <Handshake />,
-  },
-];
+const buildInfoScreensContent = (locale: Locale) => {
+  const t = messages[locale].sidebar;
+  return [
+    {
+      title: t.createContent,
+      href: withLocale(locale, "/dashboard/content/create"),
+      icon: <CirclePlus />,
+    },
+    {
+      title: t.seeAllContent,
+      href: withLocale(locale, "/dashboard/content/see-all"),
+      icon: <Rows3 />,
+    },
+    {
+      title: t.editContents,
+      href: withLocale(locale, "/dashboard/content/edit"),
+      icon: <Edit />,
+    },
+  ];
+};
 
+const buildSponsorsContent = (locale: Locale) => {
+  const t = messages[locale].sidebar;
+  return [
+    {
+      title: t.manageSponsors,
+      href: withLocale(locale, "/dashboard/sponsors/create"),
+      icon: <Handshake />,
+    },
+  ];
+};
+const DashboardSidebar = async ({ locale }: { locale: Locale }) => {
+  const t = messages[locale].sidebar;
+  const generalPages = buildGeneralPages(locale);
+  const FooterPages = buildFooterPages(locale);
+  const InfoScreenPages = buildInfoScreenPages(locale);
+  const infoScreensContent = buildInfoScreensContent(locale);
+  const SponsorsContent = buildSponsorsContent(locale);
 
-
-const DashboardSidebar = async () => {
   const session = await auth();
   const userOrganizationsResult = await fetchOrganizationForOneUser(
     session?.user?.id || "",
@@ -134,12 +157,12 @@ const DashboardSidebar = async () => {
       </SidebarHeader>
       {/* <SidebarSeparator /> */}
       <SidebarGroup>
-        <SidebarGroupLabel>Home</SidebarGroupLabel>
+        <SidebarGroupLabel>{t.homeLabel}</SidebarGroupLabel>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
-              <Link href="/dashboard">
-                <House /> Dashboard
+              <Link href={withLocale(locale, "/dashboard")}>
+                <House /> {t.dashboard}
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -148,7 +171,7 @@ const DashboardSidebar = async () => {
       <SidebarSeparator />
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Management</SidebarGroupLabel>
+          <SidebarGroupLabel>{t.management}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {generalPages.map((item) => (
@@ -165,7 +188,7 @@ const DashboardSidebar = async () => {
         </SidebarGroup>
         <SidebarSeparator />
         <SidebarGroup>
-          <SidebarGroupLabel>Info Screens</SidebarGroupLabel>
+          <SidebarGroupLabel>{t.infoScreens}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {InfoScreenPages.map((item) => (
@@ -182,7 +205,7 @@ const DashboardSidebar = async () => {
                   <SidebarMenuItem>
                     <CollapsibleTrigger asChild>
                       <SidebarMenuButton>
-                        <Pencil /> Edit existing info screens
+                        <Pencil /> {t.editExistingInfoScreens}
                       </SidebarMenuButton>
                     </CollapsibleTrigger>
                     <CollapsibleContent>
@@ -191,7 +214,10 @@ const DashboardSidebar = async () => {
                           <SidebarMenuSubItem key={screen.id}>
                             <SidebarMenuSubButton asChild>
                               <Link
-                                href={`/dashboard/info-screen/edit/${screen.id}`}
+                                href={withLocale(
+                                  locale,
+                                  `/dashboard/info-screen/edit/${screen.id}`,
+                                )}
                               >
                                 <Presentation /> {screen.title}
                               </Link>
@@ -208,7 +234,7 @@ const DashboardSidebar = async () => {
         </SidebarGroup>
         <SidebarSeparator />
         <SidebarGroup>
-          <SidebarGroupLabel>Content</SidebarGroupLabel>
+          <SidebarGroupLabel>{t.content}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {infoScreensContent.map((item) => (
@@ -225,7 +251,7 @@ const DashboardSidebar = async () => {
         </SidebarGroup>
         <SidebarSeparator />
         <SidebarGroup>
-          <SidebarGroupLabel>Sponsors</SidebarGroupLabel>
+          <SidebarGroupLabel>{t.sponsors}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {SponsorsContent.map((item) => (

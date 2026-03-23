@@ -10,12 +10,17 @@ import {
 import Image from "next/image";
 import { Button } from "./ui/button";
 import { deleteSponsor } from "@/lib/sponsorActions";
+import type { Locale } from "@/src/i18n/config";
+import { dashboardMessages } from "@/src/i18n/dashboardMessages";
 
 type SponsorCardProps = {
   sponsor: Sponsor;
+  locale: Locale;
 };
 
-const SponsorCard = ({ sponsor }: SponsorCardProps) => {
+const SponsorCard = ({ sponsor, locale }: SponsorCardProps) => {
+  const t = dashboardMessages[locale].components.sponsorCard;
+
   const deleteSponsorHandler = async (id: string) => {
     await deleteSponsor(id);
   };
@@ -31,7 +36,7 @@ const SponsorCard = ({ sponsor }: SponsorCardProps) => {
       <CardContent>
         {!sponsor.logo ? (
           <div className="mb-1 flex h-28 w-full items-center justify-center rounded-lg bg-muted">
-            No image
+            {t.noImage}
           </div>
         ) : (
           <div className="relative h-28 w-full rounded-lg bg-white">
@@ -39,7 +44,7 @@ const SponsorCard = ({ sponsor }: SponsorCardProps) => {
               src={sponsor.logo}
               fill
               className="rounded-lg object-contain px-4"
-              alt="Sponsor logo"
+              alt={t.logoAlt}
             />
           </div>
         )}
@@ -49,7 +54,7 @@ const SponsorCard = ({ sponsor }: SponsorCardProps) => {
           variant="destructive"
           onClick={() => deleteSponsorHandler(sponsor.id)}
         >
-          Delete sponsor
+          {t.deleteButton}
         </Button>
       </CardFooter>
     </Card>

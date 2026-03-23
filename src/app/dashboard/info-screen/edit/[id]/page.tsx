@@ -5,15 +5,19 @@ import ContentDragDrop from "@/src/components/dragdrop/ContentDragDrop";
 import EditInfoScreen from "@/src/components/EditInfoScreen";
 import { Separator } from "@/src/components/ui/separator";
 import { redirect } from "next/navigation";
+import { getServerLocale } from "@/src/i18n/server";
+import { dashboardMessages } from "@/src/i18n/dashboardMessages";
 
 const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const session = await auth();
   if (!session) redirect("/sign-in");
+  const locale = await getServerLocale();
+  const t = dashboardMessages[locale].infoScreenEdit;
 
   const { id } = await params;
   const infoScreen = await fetchInfoScreen(id);
 
-  if (!infoScreen.data) return <div>Info screen not found</div>;
+  if (!infoScreen.data) return <div>{t.notFound}</div>;
 
   const contents = await fetchAllContentForOrganization(
     infoScreen.data?.organizationId || "",
@@ -24,13 +28,14 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
       className="flex flex-col min-h-0 h-full w-full gap-4 rounded-lg p-4"
       suppressHydrationWarning
     >
-      <h1 className="text-2xl font-bold">Edit your info screen</h1>
+      <h1 className="text-2xl font-bold">{t.title}</h1>
       <ContentDragDrop
         infoScreenId={infoScreen.data?.id || ""}
         contents={contents?.data || []}
+        locale={locale}
       />
       <Separator />
-      <EditInfoScreen infoScreen={infoScreen?.data} />
+      <EditInfoScreen infoScreen={infoScreen?.data} locale={locale} />
     </div>
   );
 };

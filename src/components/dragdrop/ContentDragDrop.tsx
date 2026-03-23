@@ -10,6 +10,8 @@ import { addContentToInfoScreen } from "@/lib/infoScreenActions";
 import { Prisma } from "@/generated/prisma/client";
 import { toast } from "sonner";
 import Droppable2 from "./Droppable2";
+import type { Locale } from "@/src/i18n/config";
+import { dashboardMessages } from "@/src/i18n/dashboardMessages";
 
 type ContentWithInfoScreens = Prisma.ContentGetPayload<{
   include: { infoScreens: true };
@@ -18,9 +20,16 @@ type ContentWithInfoScreens = Prisma.ContentGetPayload<{
 type ContentDragDropProps = {
   contents: ContentWithInfoScreens[];
   infoScreenId: string;
+  locale: Locale;
 };
 
-const ContentDragDrop = ({ contents, infoScreenId }: ContentDragDropProps) => {
+const ContentDragDrop = ({
+  contents,
+  infoScreenId,
+  locale,
+}: ContentDragDropProps) => {
+  const t = dashboardMessages[locale].components.contentDragDrop;
+
   const [items, setItems] = useState<{
     "all-content": ContentWithInfoScreens[];
     "active-content": ContentWithInfoScreens[];
@@ -37,11 +46,11 @@ const ContentDragDrop = ({ contents, infoScreenId }: ContentDragDropProps) => {
   const handleAddContent = async () => {
     try {
       await addContentToInfoScreen(infoScreenId, items["active-content"]);
-      toast.success("Content is saved to info screen", {
+      toast.success(t.successToast, {
         position: "bottom-right",
       });
     } catch (error) {
-      toast.error(`Something went wrong, ${error}`, {
+      toast.error(`${t.errorToast}: ${error}`, {
         position: "bottom-right",
       });
     }
@@ -55,7 +64,7 @@ const ContentDragDrop = ({ contents, infoScreenId }: ContentDragDropProps) => {
     >
       <div className="flex flex-col gap-2">
         <div className="flex flex-row gap-2 justify-between">
-          <Droppable2 id="all-content" listName="All content">
+          <Droppable2 id="all-content" listName={t.allContent}>
             {items["all-content"].map((content, index) => (
               <Draggable
                 column="all-content"
@@ -69,7 +78,7 @@ const ContentDragDrop = ({ contents, infoScreenId }: ContentDragDropProps) => {
               />
             ))}
           </Droppable2>
-          <Droppable id="active-content" listName="Active content">
+          <Droppable id="active-content" listName={t.activeContent}>
             {items["active-content"].map((content, index) => (
               <Draggable
                 column="active-content"
@@ -84,10 +93,7 @@ const ContentDragDrop = ({ contents, infoScreenId }: ContentDragDropProps) => {
             ))}
           </Droppable>
         </div>
-        <p className="text-sm text-muted-foreground pb-2">
-          Add or remove content from the info-screen. Remember to save before
-          closing the page.
-        </p>
+        <p className="text-sm text-muted-foreground pb-2">{t.help}</p>
         <Button
           className="w-1/2"
           type="submit"
@@ -95,7 +101,7 @@ const ContentDragDrop = ({ contents, infoScreenId }: ContentDragDropProps) => {
             await handleAddContent();
           }}
         >
-          Save content to infoScreen
+          {t.saveButton}
         </Button>
       </div>
     </DragDropProvider>
