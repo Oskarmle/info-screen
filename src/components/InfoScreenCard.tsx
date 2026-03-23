@@ -84,6 +84,7 @@ const InfoScreenCard = ({ infoScreen, locale }: InfoScreenCardProps) => {
           <a
             href={`http://localhost:3000/info-screen/${infoScreen.id}`}
             target="_blank"
+            rel="noopener noreferrer"
           >
             <Button variant="default">{t.openButton}</Button>
           </a>
