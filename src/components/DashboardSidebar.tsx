@@ -3,6 +3,7 @@ import {
   Building2,
   CirclePlus,
   Edit,
+  Handshake,
   House,
   Pencil,
   Presentation,
@@ -99,19 +100,9 @@ const infoScreensContent = [
 
 const SponsorsContent = [
   {
-    title: "Add new sponsor",
+    title: "Manage sponsors",
     href: "/dashboard/sponsors/create",
-    icon: <CirclePlus />,
-  },
-  {
-    title: "See all sponsors",
-    href: "/dashboard/sponsors/see-all",
-    icon: <Rows3 />,
-  },
-  {
-    title: "Edit current sponsors",
-    href: "/dashboard/sponsors/edit",
-    icon: <Edit />,
+    icon: <Handshake />,
   },
 ];
 

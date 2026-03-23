@@ -34,7 +34,7 @@ const SponsorCard = ({ sponsor }: SponsorCardProps) => {
             No image
           </div>
         ) : (
-          <div className="relative h-28 w-full rounded-lg bg-accent-foreground">
+          <div className="relative h-28 w-full rounded-lg bg-white">
             <Image
               src={sponsor.logo}
               fill
